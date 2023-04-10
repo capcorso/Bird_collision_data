@@ -186,6 +186,7 @@ cleaned.status <- with(new.data, factor(Status,
 
 cleaned.status
 Survivorship <- table(cleaned.status)
+Survivorship
 barplot.default(Survivorship)
 
 # Same species colsion bar graph for new data 
@@ -216,7 +217,7 @@ ggplot(new.top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percen
 # Plot with colors 
 mycolors.2 <- colorRampPalette(brewer.pal(8, "Pastel2"))(nb.cols)
 mycolors
-ggplot(top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
+ggplot(new.top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
   geom_bar(stat = "identity", fill= mycolors.2) +
   xlab(" ") +
   ylab("%") +
