@@ -227,26 +227,20 @@ ggplot(new.top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percen
 -----------------------------------------------------------------------------------------------
 #' Merging two data sets together 
 #' 
-#' Renaming comulms so the column names match 
-library(tidyverse)
-mer.new.data <- as_tibble(new.data)
-mer.new.data
-
-mer.old.data <- as_tibble(old.data)
-mer.old.data
-
-
+#' Renaming columns so the column names match 
 
 -- 
 colnames(new.data)
-colnames(old.data)
+colnames(data)
 
-names(old.data)[names(old.data) == "Species_Abs"] <- "species"
-names(old.data)[names(old.data) == "Disposition"] <- "Status"
+names(data)[names(data) == "Species_Abv"] <- "Species"
+names(data)[names(data) == "Disposition"] <- "Status"
+names(data)[names(data) == "Species"] <- "Species.1"
 
-colnames(old.data)
+colnames(data)
+colnames(new.data)
 
-# Rename column where names is "Sepal.Length"
-names(my_data)[names(my_data) == "Sepal.Length"] <- "sepal_length"
-names(my_data)[names(my_data) == "Sepal.Width"] <- "sepal_width"
-my_data
+
+cat("Number of data entries:", nrow(merge.data))
+n_rows <- nrow(data)
+cat("Number of data entries:", n_rows)

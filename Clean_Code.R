@@ -132,3 +132,5 @@ ggplot(new.top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percen
 
 
 
+
+
