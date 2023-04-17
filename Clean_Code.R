@@ -9,11 +9,10 @@ library(ggplot2)
 library(RColorBrewer)
 library(tidyverse)
 
-url <- "https://raw.githubusercontent.com/capcorso/Bird-Collision/main/Old.ACC.dat.csv"
-data <- read.csv(url)
+data <- read.csv('./data/Old.ACC.dat.csv')
 
 url.2 <- "https://raw.githubusercontent.com/capcorso/Bird-Collision/main/ACC.data%20-%20Sheet1.csv"
-new.data <- read_csv(url.2)
+new.data <- read_csv('./data/new.data.csv (1).csv')
 
 --------------------------------------------------------------------------------
 #' Old Data Exploration
@@ -101,8 +100,8 @@ sort(outcome.ct)
 
 # Grouping euthanized and dead with - dead. And Released with -Survive, Still in rehab is NA
 cleaned.status <- with(new.data, factor(Status, 
-                                        levels = c('DOA', 'R', 'D', 'EOA', 'D24', 'E24', 'E'), 
-                                        labels = c("Dead", "Survive", "Dead", "Dead", "Dead", "Dead", "Dead")))
+                                        levels = c('DOA', 'R', 'D', 'EOA', 'D24', 'E24', 'E', 'Reh'), 
+                                        labels = c("Dead", "Survive", "Dead", "Dead", "Dead", "Dead", "Dead", "Rehab")))
 
 cleaned.status
 Survivorship <- table(cleaned.status)
@@ -127,6 +126,85 @@ ggplot(new.top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percen
   xlab(" ") +
   ylab("%") +
   ggtitle("Top 10 Species with most collisions") 
+
+top_species_list <- c( )
+
+top_sp_data <- subset(new.data, Species %in% top_sp_list)
+
+ggplot(new.data, aes(x = Species, fill=cleaned.status)) +
+  geom_bar() +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species with most collisions") 
+
+--------------------------------------------------------------------------------
+# Filling "Common.Species.Name" based on Species Abreviations 
+
+for(i in seq(1, nrow(data)))  {
+  if(data$Species_Abv[i] == "RTHA")
+      data$Common.Species.Name[i] = "Red-Tailed Hawk"
+    else if(data$Species_Abv[i] == "BDOW")
+      data$Common.Species.Name[i] = "Barred Owl"
+    else if(data$Species_Abv[i] == "EASO")
+      data$Common.Species.Name[i] = "Eastern Screech Owl"
+    else if(data$Species_Abv[i] == "GHOW")
+      data$Common.Species.Name[i] = "Great Horned Owl"
+    else if(data$Species_Abv[i] == "OSPR")
+      data$Common.Species.Name[i] = "Osprey"
+    else if(data$Species_Abv[i] == "RSHA")
+      data$Common.Species.Name[i] = "Red-Shouldered Hawk"
+    else if(data$Species_Abv[i] == "COHA")
+      data$Common.Species.Name[i] = "Cooper's Hawk"
+    else if(data$Species_Abv[i] == "MIKI")
+      data$Common.Species.Name[i] = "Mississippi Kite"
+    else if(data$Species_Abv[i] == "TUVU")
+      data$Common.Species.Name[i] = "Turkey Vulture"
+    else if(data$Species_Abv[i] == "BAEA")
+      data$Common.Species.Name[i] = "Bald Eagle"
+    else if(data$Species_Abv[i] == "BLVU")
+      data$Common.Species.Name[i] = "Black Vulture"
+    else if(data$Species_Abv[i] == "BRPE")
+      data$Common.Species.Name[i] = "Brown Pelican"
+    else if(data$Species_Abv[i] == "AMKE")
+      data$Common.Species.Name[i] = "American Kestrel"
+    else if(data$Species_Abv[i] == "SSHA")
+      data$Common.Species.Name[i] = "Sharp-shinned Hawk"
+    else if(data$Species_Abv[i] == "GBHE")
+      data$Common.Species.Name[i] = "Great Blue Heron"
+    else if(data$Species_Abv[i] == "COLO")
+      data$Common.Species.Name[i] = "Common Loon"
+    else if(data$Species_Abv[i] == "LAGU")
+      data$Common.Species.Name[i] = "Laughing Gull "
+    else if(data$Species_Abv[i] == "BWHA")
+      data$Common.Species.Name[i] = "Broad-winged Hawk "
+    else if(data$Species_Abv[i] == "BCNH")
+      data$Common.Species.Name[i] = "Black-crowned Night-Heron"
+}
+
+--------------------------------------------------------------------------------
+#' Binding work 
+
+# Making columns similar names prior to binding 
+  
+colnames(new.data)
+colnames(data)
+
+names(new.data)[names(new.data) == "Species"] <- "Common.Species.Name"
+
+colnames(data)
+colnames(new.data)
+
+# Binding 
+
+library(plyr)
+rbind.fill(data, new.data)
+
+bind.data <- rbind.fill(data, new.data)
+-------------------------------------------------------------------------------
+
+
+
+
 
 
 

@@ -230,17 +230,90 @@ ggplot(new.top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percen
 #' Renaming columns so the column names match 
 
 -- 
+  --------------------------------------------
+#' Binding work 
+  
+# Making columns similar names prior to binding 
+  
 colnames(new.data)
 colnames(data)
 
-names(data)[names(data) == "Species_Abv"] <- "Species"
-names(data)[names(data) == "Disposition"] <- "Status"
-names(data)[names(data) == "Species"] <- "Species.1"
+names(new.data)[names(new.data) == "Species"] <- "Common.Species.Name"
 
 colnames(data)
 colnames(new.data)
 
+# Binding 
+library(plyr)
+rbind.fill(data, new.data)
 
-cat("Number of data entries:", nrow(merge.data))
-n_rows <- nrow(data)
-cat("Number of data entries:", n_rows)
+bind.data <- rbind.fill(data, new.data)
+
+# This doesn't allow for my renaming of species ABV to species name's, our the outcomes to be dead or survived 
+
+names(data)
+
+-------------------------------------------------------------
+# the right way to rename abreviations with species name 
+
+  for(i in seq(1, nrow(data)))  {
+    if(data$Species_Abv[i] == "RTHA")
+      data$Common.Species.Name[i] = "Red-Tailed Hawk"
+    else if(data$Species_Abv[i] == "BDOW")
+      data$Common.Species.Name[i] = "Barred Owl"
+    else if(data$Species_Abv[i] == "EASO")
+      data$Common.Species.Name[i] = "Eastern Screech Owl"
+    else if(data$Species_Abv[i] == "GHOW")
+      data$Common.Species.Name[i] = "Great Horned Owl"
+    else if(data$Species_Abv[i] == "OSPR")
+      data$Common.Species.Name[i] = "Osprey"
+    else if(data$Species_Abv[i] == "RSHA")
+      data$Common.Species.Name[i] = "Red-Shouldered Hawk"
+    else if(data$Species_Abv[i] == "COHA")
+      data$Common.Species.Name[i] = "Cooper's Hawk"
+    else if(data$Species_Abv[i] == "MIKI")
+      data$Common.Species.Name[i] = "Mississippi Kite"
+    else if(data$Species_Abv[i] == "TUVU")
+      data$Common.Species.Name[i] = "Turkey Vulture"
+    else if(data$Species_Abv[i] == "BAEA")
+      data$Common.Species.Name[i] = "Bald Eagle"
+    else if(data$Species_Abv[i] == "BLVU")
+      data$Common.Species.Name[i] = "Black Vulture"
+    else if(data$Species_Abv[i] == "BRPE")
+      data$Common.Species.Name[i] = "Brown Pelican"
+    else if(data$Species_Abv[i] == "AMKE")
+      data$Common.Species.Name[i] = "American Kestrel"
+    else if(data$Species_Abv[i] == "SSHA")
+      data$Common.Species.Name[i] = "Sharp-shinned Hawk"
+    else if(data$Species_Abv[i] == "GBHE")
+      data$Common.Species.Name[i] = "Great Blue Heron"
+    else if(data$Species_Abv[i] == "COLO")
+      data$Common.Species.Name[i] = "Common Loon"
+    else if(data$Species_Abv[i] == "LAGU")
+      data$Common.Species.Name[i] = "Laughing Gull "
+    else if(data$Species_Abv[i] == "BWHA")
+      data$Common.Species.Name[i] = "Broad-winged Hawk "
+    else if(data$Species_Abv[i] == "BCNH")
+      data$Common.Species.Name[i] = "Black-crowned Night-Heron"
+  }
+-------------------------------------------------------------------------------
+# Now binding that with the new data 
+library(plyr)
+rbind.fill(data, new.data)
+
+bind.data <- rbind.fill(data, new.data)
+
+
+
+
+
+----------------------------------------------------------------
+  # Emmi Help 
+  
+  ggplot(new.data, aes(x = Species, fill=cleaned.status)) +
+  geom_bar() +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species with most collisions") 
+
+# I want this graph but only the top 10 species with the most collisions. Not all the species 
