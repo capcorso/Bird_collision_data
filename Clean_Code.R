@@ -280,9 +280,29 @@ ggplot(Bind_top10_percent, aes(x = reorder(how_obtained_code, -frequency), y = p
   ggtitle("Top 10 Species with most collisions combined data") 
 
 
+#Barred Owl Collision Graph 
 
--------------------------------------------------------------------------------
-  
+Bar_Owl_subset <- subset(bind.data, Species_Name %in% c('Barred Owl'))
+clean_Bar_Owlsub <- Bar_Owl_subset[ , c("Species_Name", "Year.Admitted", 
+                                        "Disposition")]  
+
+Disposition <- add_Bar_Owl$Group.2
+add_Bar_Owl <- aggregate(clean_Bar_Owlsub$Species_Name, by=list(clean_Bar_Owlsub$Year.Admitted, 
+                                                                clean_Bar_Owlsub$Disposition, clean_Bar_Owlsub$Species_Name), FUN=length)
+
+ggplot(add_Bar_Owl, aes(x =Group.1, y = x, color = Disposition)) +
+  geom_point(size=4) +
+  xlab("Year Admitted") +
+  ylab("Collisions") +
+  ggtitle("Barred Owl Collisions since 1991")
+
+Barred_Owl_Collision_Graph <- ggplot(add_Bar_Owl, aes(x =Group.1, y = x, color = Disposition)) +
+  geom_point(size=4) +
+  xlab("Year Admitted") +
+  ylab("Collisions") +
+  ggtitle("Barred Owl Collisions since 1991")
+
+
 
 
 

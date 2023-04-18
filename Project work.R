@@ -243,6 +243,8 @@ names(data)[names(data) == "Species_Abv"] <- "Species_Name"
 
 names(new.data)[names(new.data) == "Status"] <- "Disposition"
 
+names(new.data)[names(new.data) == "Admission date"] <- "Year.Admitted"
+
 colnames(data)
 colnames(new.data)
 
@@ -434,12 +436,57 @@ bind_dat_subset <- subset(bind.data, Species_Name %in% c('Bald Eagle','Barred Ow
  
 
   -----------------------------------------------------------------------------
-
-      
-
+  -------------------------------------------------------------------------------
+  # ANNEX NO WORK  
   
-    
-    
-    
--------------------------------------------------------------------------
+  Bar_Owl_subset <- subset(bind.data, Species_Name %in% c('Barred Owl'))
 
+  Year_data_bind <-table(Bar_Owl_subset$Year.Admitted)
+
+  plot(x = Bar_Owl_subset$Year.Admitted,y = ,
+     xlab = "Year",
+     ylab = "Collisions",
+     main = "Barred Owl Collisions"
+)
+  plot(x = Bar_Owl_subset$Year.Admitted,y= Year_data_bind,
+       xlab = "Year",
+       ylab = "Collisions",
+       main = "Barred Owl Collisions"
+  )
+plot(x= Bar_Owl_subset$Year.Admitted,y= Bar_Owl_subset$Species_Name,
+       ylim = c(1, 100),
+       mian= "Barred Owl Collisions")
+  
+transform(clean_owlsubset, freq.strike = ave(seq(nrow(clean_owlsubset)), Year.Admitted, FUN=length))
+
+plot(x= short$Year.Admitted, y= short$freq.strike)  
+
+ggplot(x= short$Year.Admitted, y= short$freq.strike)
+
+short <- transform(clean_owlsubset, freq.strike = ave(seq(nrow(clean_owlsubset)), Year.Admitted, FUN=length))  
+-------------------------------------------------------------------------
+  ggplot(df,aes(x=Reviews,y=Price))+geom_point()
+
+------
+# new approach 
+  
+#Barred Owl Collision Graph 
+
+Bar_Owl_subset <- subset(bind.data, Species_Name %in% c('Barred Owl'))
+clean_Bar_Owlsub <- Bar_Owl_subset[ , c("Species_Name", "Year.Admitted", "Disposition")]  
+
+Disposition <- add_Bar_Owl$Group.2
+add_Bar_Owl <- aggregate(clean_Bar_Owlsub$Species_Name, by=list(clean_Bar_Owlsub$Year.Admitted, 
+                        clean_Bar_Owlsub$Disposition, clean_Bar_Owlsub$Species_Name), FUN=length)
+
+ggplot(add_Bar_Owl, aes(x =Group.1, y = x, color = Disposition)) +
+  geom_point(size=4) +
+  xlab("Year Admitted") +
+  ylab("Collisions") +
+  ggtitle("Barred Owl Collisions since 1991")
+
+Barred_Owl_Collision_Graph <- ggplot(add_Bar_Owl, aes(x =Group.1, y = x, color = Disposition)) +
+  geom_point(size=4) +
+  xlab("Year Admitted") +
+  ylab("Collisions") +
+  ggtitle("Barred Owl Collisions since 1991")
