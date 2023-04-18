@@ -42,7 +42,7 @@ sp_df$percentage <- sp_percent
 top_sp_df <- sp_df[sp_df$how_obtained_code %in% top_sp,]
 
 nb.cols <- 10
-mycolors <- colorRampPalette(brewer.pal(9, "Pastel1"))(nb.cols)
+mycolors <- colorRampPalette(brewer.pal(9, "Greens"))(nb.cols)
 mycolors
 
 ggplot(top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
@@ -52,8 +52,8 @@ ggplot(top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percentage
   ggtitle("Top 10 Species with most collisions 1992-2017 ") 
 
 # Replacing species code with common name, 're' 
-cleaned.species <- with(data, factor(Species_Abv, 
-                                     levels = c('RTHA', 'BDOW', 'EASO', 'GHOW', 'OSPR', 'RSHA', 'COHA', 'MIKI', 'TUVU', 'BEA'), 
+cleaned.species <- with(data, factor(Species_Name, 
+                                     levels = c('RTHA', 'BDOW', 'EASO', 'GHOW', 'OSPR', 'RSHA', 'COHA', 'MIKI', 'TUVU', 'BAEA'), 
                                      labels = c("Red Tailed Hawk", "Barred Owl", "Eastern Screech Owl", "Great Horned Owl", "Osprey", "Red-Shouldered Hawk ", "Cooper's Hawk",
                                                 "Mississippi Kite", "Turkey Vulture", "Bald Eagle")))
 re.count <- table(cleaned.species)
@@ -61,6 +61,7 @@ re_percent <- round(prop.table(re.count) * 100, 2)
 re.top_sp <- names(sort(re.count, decreasing = TRUE)[1:10])
 re.data_sub <- data[cleaned.species %in% re.top_sp,]
 re.sp_df <- as.data.frame(re.count)
+
 colnames(re.sp_df) <- c("how_obtained_code", "frequency")
 re.sp_df$percentage <- re_percent
 re.top_sp_df <- re.sp_df[re.sp_df$how_obtained_code %in% re.top_sp,]
@@ -88,19 +89,19 @@ barplot(table(outcome.list))
 #' New Data Exploration 'new'
 
 # New data Species List 
-new.sp.list <- new.data$Species
+new.sp.list <- new.data$Species_Name
 list(new.sp.list)
 ct.new.sp <- table(new.sp.list)
 sort(ct.new.sp)
 
 # look at outcome 
-outcome <- new.data$Status
+outcome <- new.data$Disposition
 list(outcome)
 outcome.ct <- table(outcome)
 sort(outcome.ct)
 
 # Grouping euthanized and dead with - dead. And Released with -Survive, Still in rehab is NA
-cleaned.status <- with(new.data, factor(Status, 
+cleaned.status <- with(new.data, factor(Disposition, 
                                         levels = c('DOA', 'R', 'D', 'EOA', 'D24', 'E24', 'E', 'Reh'), 
                                         labels = c("Dead", "Survive", "Dead", "Dead", "Dead", "Dead", "Dead", "Rehab")))
 
@@ -110,28 +111,29 @@ Survivorship
 barplot.default(Survivorship)
 
 # Same species colsion bar graph for new data 
-new.sp_count <- table(new.data$Species)
+new.sp_count <- table(new.data$Species_Name)
 new.sp_percent <- round(prop.table(new.sp_count) * 100, 2)
 new.top_sp <- names(sort(new.sp_count, decreasing = TRUE)[1:10])
-new.data_sub <- new.data[new.data$Species %in% new.top_sp,]
+new.data_sub <- new.data[new.data$Species_Name %in% new.top_sp,]
 new.sp_df <- as.data.frame(new.sp_count)
 colnames(new.sp_df) <- c("how_obtained_code", "frequency")
 new.sp_df$percentage <- new.sp_percent
 new.top_sp_df <- new.sp_df[new.sp_df$how_obtained_code %in% new.top_sp,]
 
-mycolors.2 <- colorRampPalette(brewer.pal(8, "Pastel2"))(nb.cols)
+mycolors.2 <- colorRampPalette(brewer.pal(8, "Blues"))(nb.cols)
 mycolors
 
 ggplot(new.top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
   geom_bar(stat = "identity", fill= mycolors.2) +
   xlab(" ") +
   ylab("%") +
-  ggtitle("Top 10 Species with most collisions") 
+  ggtitle("Top 10 Species with most collisions 2017-2023") 
 
 top_species_list <- c( )
 
 top_sp_data <- subset(new.data, Species %in% top_sp_list)
 
+__ This one doesnt work 
 ggplot(new.data, aes(x = Species, fill=cleaned.status)) +
   geom_bar() +
   xlab(" ") +
@@ -142,7 +144,7 @@ ggplot(new.data, aes(x = Species_Name, fill=cleaned.status)) +
   geom_bar() +
   xlab(" ") +
   ylab("%") +
-  ggtitle("Top 10 Species with most collisions")
+  ggtitle("Species Collisions & Dispositions")
 
 --------------------------------------------------------------------------------
 # Making columns similar names prior to binding 
@@ -279,6 +281,8 @@ ggplot(Bind_top10_percent, aes(x = reorder(how_obtained_code, -frequency), y = p
   ylab("%") +
   ggtitle("Top 10 Species with most collisions combined data") 
 
+# 
+
 
 #Barred Owl Collision Graph 
 
@@ -304,7 +308,28 @@ Barred_Owl_Collision_Graph <- ggplot(add_Bar_Owl, aes(x =Group.1, y = x, color =
 
 
 
+-------------------
+  Lets get some stats 
+Survivorship = c()
+for(i in seq(1, nrow(bind.data))){
+  if(bind.data$Disposition[i]=="Died") 
+    Survivorship[i] = 0
+  else if(bind.data$Disposition[i]== "Survived")
+    Survivorship[i] = 1 
+  else if(bind.data$Disposition[i]== "Transfer")
+    Survivorship[i] = NA
+}
+bind.data = cbind(bind.data, Survivorship)
+Survivorship = bind.data$Survivorship
 
+glm_bind =glm(bind.data$Survivorship ~ bind.data$Species_Name + bind.data$Disposition)
+
+summary(glm_bind)
+plot(glm_bind)
+
+glm_full = glm(full_set$Survive_full ~ full_set$Species_Abv + bind.data$Disposition)
+summary(glm_full)
+plot(glm_full)
 
 
 

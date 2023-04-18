@@ -370,20 +370,21 @@ bind.data <- rbind.fill(data, new.data)
   
   Bind_Species_table_DF <- as.data.frame(Bind_species_table)
   
-  colnames(Bind_Species_table_DF) <- c("how_obtained_code", "frequency")
+  colnames(Bind_Species_table_DF) <- c("Species_Name", "frequency")
   Bind_Species_table_DF$percentage <- Bind_species_percent_collision
   
-  Bind_top10_percent <- Bind_Species_table_DF[Bind_Species_table_DF$how_obtained_code %in% Bind_top10_spec,]
+  Bind_top10_percent <- Bind_Species_table_DF[Bind_Species_table_DF$Species_Name %in% Bind_top10_spec,]
   
   bind_dat_subset <- subset(bind.data, Species_Name %in% c('Bald Eagle','Barred Owl','Coopers Hawk',
                                                            'Eastern Screech Owl', 'Great Horned Owl', 'Mississippi Kite ', 'Osprey', 
                                                            'Red-Shouldered Hawk', 'Red-Tailed Hawk', 'Turkey Vulture'))
   
-  ggplot(Bind_top10_percent, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
-    geom_bar(stat = "identity") + 
+  mycolors.4 <- colorRampPalette(brewer.pal(8, "RdPu"))(nb.cols)
+  ggplot(Bind_top10_percent, aes(x = reorder(Species_Name, -frequency), y = percentage)) +
+    geom_bar(stat = "identity", fill= mycolors.4 ) + 
     xlab(" ") +
     ylab("%") +
-    ggtitle("Bind Data Trial")
+    ggtitle("Top 10 Binded 1992-2023")
   
   disposition_table <- bind.data$Disposition
   ggplot(bind.data, aes(x = Species_Name, fill=disposition_table)) +
@@ -392,7 +393,18 @@ bind.data <- rbind.fill(data, new.data)
     ylab("%") +
     ggtitle("Bind Data Trial 2")
   
+
+  Collision_Disposition <- bind_dat_subset$Disposition
   Top10_with_Dispo <-ggplot(bind_dat_subset, aes(x = Species_Name, fill= Collision_Disposition)) +
+    geom_bar() +
+    xlab(" ") +
+    ylab("%") +
+    ggtitle("Top 10 Species Collisions with Disposition")
+  
+  Top10_with_Dispo + coord_flip()
+  
+  Top10_with_Dispo <-
+    ggplot(bind_dat_subset, aes(x = Species_Name, fill= disposition_table)) +
     geom_bar() +
     xlab(" ") +
     ylab("%") +
@@ -409,26 +421,13 @@ bind.data <- rbind.fill(data, new.data)
   
   Bind_dispo_table_DF <- as.data.frame(Bind_dispo_table)
   
-  colnames(Bind_dispo_table_DF) <- c("how_obtained_code", "frequency")
+  colnames(Bind_dispo_table_DF) <- c("Species_Name", "frequency")
   Bind_dispo_table_DF$percentage <- Bind_dispo_percent_collision
   
-  Bind_top10dispo_percent <- Bind_dispo_table_DF[Bind_dispo_table_DF$how_obtained_code %in% Bind_top10_dis,]
+  Bind_top10dispo_percent <- Bind_dispo_table_DF[Bind_dispo_table_DF$Species_Name %in% Bind_top10_dis,]
   
   
-  
-  
-  dispo_sp_table <- table(bind.data$Species_Name, bind.data$Disposition)
-  
-  dispo_sp_percent_collision <- round(prop.column(dispo_sp_table) * 100, 2)
-  Bind_top10_spec <- names(sort(Bind_species_percent_collision, decreasing = TRUE)[1:10])
-  Bind.data.sub <- bind.data[bind.data$Species_Name %in% Bind_top10_spec,]
-  
-  Bind_Species_table_DF <- as.data.frame(Bind_species_table)
-  
-  colnames(Bind_Species_table_DF) <- c("how_obtained_code", "frequency")
-  Bind_Species_table_DF$percentage <- Bind_species_percent_collision
-  
-  Bind_top10_percent <- Bind_Species_table_DF[Bind_Species_table_DF$how_obtained_code %in% Bind_top10_spec,]
+  Bind_top10_percent <- Bind_Species_table_DF[Bind_Species_table_DF$Species_Name %in% Bind_top10_spec,]
   
 bind_dat_subset <- subset(bind.data, Species_Name %in% c('Bald Eagle','Barred Owl','Coopers Hawk',
         'Eastern Screech Owl', 'Great Horned Owl', 'Mississippi Kite ', 'Osprey', 
@@ -464,12 +463,10 @@ plot(x= short$Year.Admitted, y= short$freq.strike)
 ggplot(x= short$Year.Admitted, y= short$freq.strike)
 
 short <- transform(clean_owlsubset, freq.strike = ave(seq(nrow(clean_owlsubset)), Year.Admitted, FUN=length))  
--------------------------------------------------------------------------
-  ggplot(df,aes(x=Reviews,y=Price))+geom_point()
+---------------------------------------------------------------------------------
 
-------
-# new approach 
-  
+
+-------------------------------------------------------------------------------
 #Barred Owl Collision Graph 
 
 Bar_Owl_subset <- subset(bind.data, Species_Name %in% c('Barred Owl'))
@@ -490,3 +487,174 @@ Barred_Owl_Collision_Graph <- ggplot(add_Bar_Owl, aes(x =Group.1, y = x, color =
   xlab("Year Admitted") +
   ylab("Collisions") +
   ggtitle("Barred Owl Collisions since 1991")
+
+-------------------------------------------------------------------------------
+# Eastern Screech Owl 
+Screech_subset <- subset(bind.data, Species_Name %in% c('Eastern Screech Owl'))
+clean_screech_subset <- Screech_subset[ , c("Species_Name", "Year.Admitted", "Disposition")]  
+
+Screech_add <- aggregate(clean_screech_subset$Species_Name, by=list(clean_screech_subset$Year.Admitted, 
+                                                                    clean_screech_subset$Disposition, clean_screech_subset$Species_Name), FUN=length)
+Disposition <- Screech_add$Group.2
+
+ggplot(Screech_add, aes(x =Group.1, y = x, color = Disposition)) +
+  geom_point(size=4) +
+  xlab("Year Admitted") +
+  ylab("Collisions") +
+  ggtitle("Eastern Screech Owl Collisions since 1991")
+
+-------------------------------------------------------------------------------
+#Great Horned Owl
+GH_subset <- subset(bind.data, Species_Name %in% c('Great Horned Owl'))
+clean_GH_subset <- GH_subset[ , c("Species_Name", "Year.Admitted", "Disposition")]  
+
+GH_add <- aggregate(clean_GH_subset$Species_Name, by=list(clean_GH_subset$Year.Admitted, 
+                                                                    clean_GH_subset$Disposition, clean_GH_subset$Species_Name), FUN=length)
+Disposition <- GH_add$Group.2
+
+ggplot(GH_add, aes(x =Group.1, y = x, color = Disposition)) +
+  geom_point(size=4) +
+  xlab("Year Admitted") +
+  ylab("Collisions") +
+  ggtitle("Great Horned Owl Collisions since 1991")
+
+-------------------------------------------------------------------------------
+#Bald Eagle
+BE_subset <- subset(bind.data, Species_Name %in% c('Bald Eagle'))
+clean_BE_subset <- BE_subset[ , c("Species_Name", "Year.Admitted", "Disposition")]  
+
+BE_add <- aggregate(clean_BE_subset$Species_Name, by=list(clean_BE_subset$Year.Admitted, 
+                                                                    clean_BE_subset$Disposition, clean_BE_subset$Species_Name), FUN=length)
+Disposition <- BE_add$Group.2
+
+ggplot(BE_add, aes(x =Group.1, y = x, color = Disposition)) +
+  geom_point(size=4) +
+  xlab("Year Admitted") +
+  ylab("Collisions") +
+  ggtitle("Bald Eagle Collisions since 1991")
+-------------------------------------------------------------------------------
+#Red-Tailed Hawk 
+  RTH_subset <- subset(bind.data, Species_Name %in% c('Red-Tailed Hawk'))
+clean_RTH_subset <- RTH_subset[ , c("Species_Name", "Year.Admitted", "Disposition")]  
+
+RTH_add <- aggregate(clean_RTH_subset$Species_Name, by=list(clean_RTH_subset$Year.Admitted, 
+                                                                    clean_RTH_subset$Disposition, clean_RTH_subset$Species_Name), FUN=length)
+Disposition <- RTH_add$Group.2
+
+ggplot(RTH_add, aes(x =Group.1, y = x, color = Disposition)) +
+  geom_point(size=4) +
+  xlab("Year Admitted") +
+  ylab("Collisions") +
+  ggtitle("Red-Tailed Hawk ")
+# Barred Owl
+BO_subset <- subset(bind.data, Species_Name %in% c('Barred Owl'))
+clean_BO_subset <- BO_subset[ , c("Species_Name", "Year.Admitted", "Disposition")]  
+
+BO_add <- aggregate(clean_BO_subset$Species_Name, by=list(clean_BO_subset$Year.Admitted, 
+                                                                    clean_BO_subset$Disposition, clean_BO_subset$Species_Name), FUN=length)
+Disposition <- BO_add$Group.2
+
+ggplot(BO_add, aes(x =Group.1, y = x, color = Disposition)) +
+  geom_point(size=4) +
+  xlab("Year Admitted") +
+  ylab("Collisions") +
+  ggtitle("Barred Owl Collisions since 1991")
+
+
+
+
+# FIXXX table 
+Bind_species_table <- table(bind.data$Species_Name)
+Bind_species_percent_collision <- round(prop.table(Bind_species_table) * 100, 2)
+Bind_top10_spec <- names(sort(Bind_species_table, decreasing = TRUE)[1:10])
+Bind.data.sub <- bind.data[bind.data$Species_Name %in% Bind_top10_spec,]
+
+Bind_Species_table_DF <- as.data.frame(Bind.data.sub)
+
+colnames(Bind_Species_table_DF) <- c("Species_Name", "frequency", "Percentage")
+Bind_Species_table_DF$percentage <- Bind_species_percent_collision
+
+Bind_top10_percent <- Bind_Species_table_DF[Bind_Species_table_DF$Species_Name %in% Bind_top10_spec,]
+
+bind_dat_subset <- subset(bind.data, Species_Name %in% c('Bald Eagle','Barred Owl','Coopers Hawk',
+                                                         'Eastern Screech Owl', 'Great Horned Owl', 'Mississippi Kite ', 'Osprey', 
+                                                         'Red-Shouldered Hawk', 'Red-Tailed Hawk', 'Turkey Vulture')))
+
+
+ggplot(bind_dat_subset, aes(x = Species_Name)) +
+  geom_bar() +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species Collisions with Disposition")
+
+Top10_with_Dispo <-
+  ggplot(Bind_top10_percent, aes(x = Species_Name, y= Bind_top10_percent$percentage)) +
+  geom_bar() +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species Collisions with Disposition")
+
+
+
+Collision_Disposition <- bind_dat_subset$Disposition
+Top10_with_Dispo <-ggplot(bind_dat_subset, aes(x = Species_Name, fill= Collision_Disposition)) +
+  geom_bar() +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species Collisions with Disposition")
+
+Top10_with_Dispo + coord_flip()
+
+Top10_with_Dispo <-
+  ggplot(bind_dat_subset, aes(x = Species_Name, fill= disposition_table)) +
+  geom_bar() +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species Collisions with Disposition")
+
+Top10_with_Dispo + coord_flip()
+
+
+
+bind_dat_subset <- subset(bind.data, Species_Name %in% c('Bald Eagle','Barred Owl','Coopers Hawk',
+                                                         'Eastern Screech Owl', 'Great Horned Owl', 'Mississippi Kite ', 'Osprey', 
+                                                         'Red-Shouldered Hawk', 'Red-Tailed Hawk', 'Turkey Vulture'))
+
+
+Top10_with_Dispo <-ggplot(bind_dat_subset, aes(x = Species_Name, fill= Disposition)) +
+  geom_bar() +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species Collisions with Disposition")
+
+Bind_species_table <- table(bind.data$Species_Name)
+Bind_species_percent_collision <- round(prop.table(Bind_species_table) * 100, 2)
+Bind_top10_spec <- names(sort(Bind_species_percent_collision, decreasing = TRUE)[1:10])
+Bind.data.sub <- bind.data[bind.data$Species_Name %in% Bind_top10_spec,]
+
+Bind_Species_table_DF <- as.data.frame(Bind_species_table)
+
+colnames(Bind_Species_table_DF) <- c("Species_Name", "frequency")
+Bind_Species_table_DF$percentage <- Bind_species_percent_collision
+
+Bind_top10_percent <- Bind_Species_table_DF[Bind_Species_table_DF$Species_Name %in% Bind_top10_spec,]
+
+bind_dat_subset <- subset(bind.data, Species_Name %in% c('Bald Eagle','Barred Owl','Coopers Hawk',
+                                                         'Eastern Screech Owl', 'Great Horned Owl', 'Mississippi Kite ', 'Osprey', 
+                                                         'Red-Shouldered Hawk', 'Red-Tailed Hawk', 'Turkey Vulture'))
+
+
+
+Bin_Species_table_DF <- subset(Bind_Species_table_DF, Species_Name %in% c('Bald Eagle','Barred Owl','Coopers Hawk',
+                                                              'Eastern Screech Owl', 'Great Horned Owl', 'Mississippi Kite ', 'Osprey', 
+                                                           'Red-Shouldered Hawk', 'Red-Tailed Hawk', 'Turkey Vulture'))
+
+
+
+  ggplot(Bind_top10_percent, aes(x = Species_Name)) +
+  geom_bar() +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species Collisions")
+
+Top10_with_Dispo + coord_flip()
