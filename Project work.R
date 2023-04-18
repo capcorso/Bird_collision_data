@@ -238,7 +238,10 @@ ggplot(new.top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percen
 colnames(new.data)
 colnames(data)
 
-names(new.data)[names(new.data) == "Species"] <- "Common.Species.Name"
+names(new.data)[names(new.data) == "Species"] <- "Species_Name"
+names(data)[names(data) == "Species_Abv"] <- "Species_Name"
+
+names(new.data)[names(new.data) == "Status"] <- "Disposition"
 
 colnames(data)
 colnames(new.data)
@@ -255,47 +258,96 @@ names(data)
 
 -------------------------------------------------------------
 # the right way to rename abreviations with species name 
+sort(table(data$Species_Abv))
 
-  for(i in seq(1, nrow(data)))  {
-    if(data$Species_Abv[i] == "RTHA")
-      data$Common.Species.Name[i] = "Red-Tailed Hawk"
-    else if(data$Species_Abv[i] == "BDOW")
-      data$Common.Species.Name[i] = "Barred Owl"
-    else if(data$Species_Abv[i] == "EASO")
-      data$Common.Species.Name[i] = "Eastern Screech Owl"
-    else if(data$Species_Abv[i] == "GHOW")
-      data$Common.Species.Name[i] = "Great Horned Owl"
-    else if(data$Species_Abv[i] == "OSPR")
-      data$Common.Species.Name[i] = "Osprey"
-    else if(data$Species_Abv[i] == "RSHA")
-      data$Common.Species.Name[i] = "Red-Shouldered Hawk"
-    else if(data$Species_Abv[i] == "COHA")
-      data$Common.Species.Name[i] = "Cooper's Hawk"
-    else if(data$Species_Abv[i] == "MIKI")
-      data$Common.Species.Name[i] = "Mississippi Kite"
-    else if(data$Species_Abv[i] == "TUVU")
-      data$Common.Species.Name[i] = "Turkey Vulture"
-    else if(data$Species_Abv[i] == "BAEA")
-      data$Common.Species.Name[i] = "Bald Eagle"
-    else if(data$Species_Abv[i] == "BLVU")
-      data$Common.Species.Name[i] = "Black Vulture"
-    else if(data$Species_Abv[i] == "BRPE")
-      data$Common.Species.Name[i] = "Brown Pelican"
-    else if(data$Species_Abv[i] == "AMKE")
-      data$Common.Species.Name[i] = "American Kestrel"
-    else if(data$Species_Abv[i] == "SSHA")
-      data$Common.Species.Name[i] = "Sharp-shinned Hawk"
-    else if(data$Species_Abv[i] == "GBHE")
-      data$Common.Species.Name[i] = "Great Blue Heron"
-    else if(data$Species_Abv[i] == "COLO")
-      data$Common.Species.Name[i] = "Common Loon"
-    else if(data$Species_Abv[i] == "LAGU")
-      data$Common.Species.Name[i] = "Laughing Gull "
-    else if(data$Species_Abv[i] == "BWHA")
-      data$Common.Species.Name[i] = "Broad-winged Hawk "
-    else if(data$Species_Abv[i] == "BCNH")
-      data$Common.Species.Name[i] = "Black-crowned Night-Heron"
+  for(i in seq(1, nrow(bind.data)))  {
+    if(bind.data$Species_Name[i] == "RTHA")
+      bind.data$Species_Name[i] = "Red-Tailed Hawk"
+    else if(bind.data$Species_Name[i] == "BDOW")
+      bind.data$Species_Name[i] = "Barred Owl"
+    else if(bind.data$Species_Name[i] == "EASO")
+      bind.data$Species_Name[i] = "Eastern Screech Owl"
+    else if(bind.data$Species_Name[i] == "GHOW")
+      bind.data$Species_Name[i] = "Great Horned Owl"
+    else if(bind.data$Species_Name[i] == "OSPR")
+      bind.data$Species_Name[i] = "Osprey"
+    else if(bind.data$Species_Name[i] == "RSHA")
+      bind.data$Species_Name[i] = "Red-Shouldered Hawk"
+    else if(bind.data$Species_Name[i] == "COHA")
+      bind.data$Species_Name[i] = "Coopers Hawk"
+    else if(bind.data$Species_Name[i] == "MIKI")
+      bind.data$Species_Name[i] = "Mississippi Kite"
+    else if(bind.data$Species_Name[i] == "TUVU")
+      bind.data$Species_Name[i] = "Turkey Vulture"
+    else if(bind.data$Species_Name[i] == "BAEA")
+      bind.data$Species_Name[i] = "Bald Eagle"
+    else if(bind.data$Species_Name[i] == "BLVU")
+      bind.data$Species_Name[i] = "Black Vulture"
+    else if(bind.data$Species_Name[i] == "BRPE")
+      bind.data$Species_Name[i] = "Brown Pelican"
+    else if(bind.data$Species_Name[i] == "AMKE")
+      bind.data$Species_Name[i] = "American Kestrel"
+    else if(bind.data$Species_Name[i] == "SSHA")
+      bind.data$Species_Name[i] = "Sharp-shinned Hawk"
+    else if(bind.data$Species_Name[i] == "GBHE")
+      bind.data$Species_Name[i] = "Great Blue Heron"
+    else if(bind.data$Species_Name[i] == "COLO")
+      bind.data$Species_Name[i] = "Common Loon"
+    else if(bind.data$Species_Name[i] == "LAGU")
+      bind.data$Species_Name[i] = "Laughing Gull"
+    else if(bind.data$Species_Name[i] == "BWHA")
+      bind.data$Species_Name[i] = "Broad-winged Hawk"
+    else if(bind.data$Species_Name[i] == "BCNH")
+      bind.data$Species_Name[i] = "Black-crowned Night-Heron"
+    else if(bind.data$Species_Name[i] == "BNOW")
+      bind.data$Species_Name[i] = "Barn Owl"
+    else if(bind.data$Species_Name[i] == "BLSC")
+      bind.data$Species_Name[i] = "Black Scoter"
+    else if(bind.data$Species_Name[i] == "DCCO")
+      bind.data$Species_Name[i] = "Double-crested Cormorant"
+    else if(bind.data$Species_Name[i] == "GREG")
+      bind.data$Species_Name[i] = "Great Egret"
+    else if(bind.data$Species_Name[i] == "CLRA")
+      bind.data$Species_Name[i] = "Clapper Rail"
   }
+
+# Cleaning Binded disposition 
+for(i in seq(1, nrow(bind.data))){
+  if(bind.data$Disposition[i]== "Died"| 
+     bind.data$Disposition[i]== "DIED"| 
+     bind.data$Disposition[i]=="ESCAPED"|
+     bind.data$Disposition[i]== "EUTHANIZED"|
+     bind.data$Disposition[i]== "NR/DIED"| 
+     bind.data$Disposition[i]== "NR/ESCAPED"| 
+     bind.data$Disposition[i]== "NR/EUTHANIZED"| 
+     bind.data$Disposition[i]== "TRANSFERRED/DIED"|
+     bind.data$Disposition[i]== "TRANSFERRED/EUTHANIZED"| 
+     bind.data$Disposition[i]=="D"| 
+     bind.data$Disposition[i]=="D24"| 
+     bind.data$Disposition[i]=="DOA"| 
+     bind.data$Disposition[i]=="E"| 
+     bind.data$Disposition[i]== "Euthanized"|
+     bind.data$Disposition[i]=="E24"| 
+     bind.data$Disposition[i]=="EOA")
+  bind.data$Disposition[i] = "Died"
+  else if(bind.data$Disposition[i] == "Active"| 
+          bind.data$Disposition[i]=="ESCAPED"| 
+          bind.data$Disposition[i]=="NR/ESCAPED"| 
+          bind.data$Disposition[i]== "NR/RELEASED"| 
+          bind.data$Disposition[i]=="Released"| 
+          bind.data$Disposition[i]=="RELEASED"| 
+          bind.data$Disposition[i]=="Self-Release"| 
+          bind.data$Disposition[i]=="R")
+    bind.data$Disposition[i] = "Survived"
+  else if(bind.data$Disposition[i]== "TRANSFER OUT"| 
+          bind.data$Disposition[i]=="Transferred"|
+          bind.data$Disposition[i]=="TRANSFERRED"| 
+          bind.data$Disposition[i]=="TRANSFERRED OUT"| 
+          bind.data$Disposition[i]=="Reh"|
+          bind.data$Disposition[i]== "PENDING"|
+          bind.data$Disposition[i]== "")
+    bind.data$Disposition[i] = "Transfer"
+}
 -------------------------------------------------------------------------------
 # Now binding that with the new data 
 library(plyr)
@@ -303,17 +355,91 @@ rbind.fill(data, new.data)
 
 bind.data <- rbind.fill(data, new.data)
 
+---------------------------------------------------------------------------------
+# Now what to do with binded work ? 
 
-
-
-
-----------------------------------------------------------------
-  # Emmi Help 
+--------------------------------------------------------------------------------
+# Table work 
   
-  ggplot(new.data, aes(x = Species, fill=cleaned.status)) +
-  geom_bar() +
-  xlab(" ") +
-  ylab("%") +
-  ggtitle("Top 10 Species with most collisions") 
+  Bind_species_table <- table(bind.data$Species_Name)
+  Bind_species_percent_collision <- round(prop.table(Bind_species_table) * 100, 2)
+  Bind_top10_spec <- names(sort(Bind_species_percent_collision, decreasing = TRUE)[1:10])
+  Bind.data.sub <- bind.data[bind.data$Species_Name %in% Bind_top10_spec,]
+  
+  Bind_Species_table_DF <- as.data.frame(Bind_species_table)
+  
+  colnames(Bind_Species_table_DF) <- c("how_obtained_code", "frequency")
+  Bind_Species_table_DF$percentage <- Bind_species_percent_collision
+  
+  Bind_top10_percent <- Bind_Species_table_DF[Bind_Species_table_DF$how_obtained_code %in% Bind_top10_spec,]
+  
+  bind_dat_subset <- subset(bind.data, Species_Name %in% c('Bald Eagle','Barred Owl','Coopers Hawk',
+                                                           'Eastern Screech Owl', 'Great Horned Owl', 'Mississippi Kite ', 'Osprey', 
+                                                           'Red-Shouldered Hawk', 'Red-Tailed Hawk', 'Turkey Vulture'))
+  
+  ggplot(Bind_top10_percent, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
+    geom_bar(stat = "identity") + 
+    xlab(" ") +
+    ylab("%") +
+    ggtitle("Bind Data Trial")
+  
+  disposition_table <- bind.data$Disposition
+  ggplot(bind.data, aes(x = Species_Name, fill=disposition_table)) +
+    geom_bar() +
+    xlab(" ") +
+    ylab("%") +
+    ggtitle("Bind Data Trial 2")
+  
+  Top10_with_Dispo <-ggplot(bind_dat_subset, aes(x = Species_Name, fill= Collision_Disposition)) +
+    geom_bar() +
+    xlab(" ") +
+    ylab("%") +
+    ggtitle("Top 10 Species Collisions with Disposition")
+  
+  Top10_with_Dispo + coord_flip()
+  
+  --------------------------------------------------------------------------------  
 
-# I want this graph but only the top 10 species with the most collisions. Not all the species 
+  Bind_dispo_table <- table(bind.data$Disposition)
+  Bind_dispo_percent_collision <- round(prop.table(Bind_dispo_table) * 100, 2)
+  Bind_top10_dis <- names(sort(Bind_dispo_percent_collision, decreasing = TRUE)[1:10])
+  bind.disdata_sub <- bind.data[bind.data$Disposition %in% Bind_top10_dis,]
+  
+  Bind_dispo_table_DF <- as.data.frame(Bind_dispo_table)
+  
+  colnames(Bind_dispo_table_DF) <- c("how_obtained_code", "frequency")
+  Bind_dispo_table_DF$percentage <- Bind_dispo_percent_collision
+  
+  Bind_top10dispo_percent <- Bind_dispo_table_DF[Bind_dispo_table_DF$how_obtained_code %in% Bind_top10_dis,]
+  
+  
+  
+  
+  dispo_sp_table <- table(bind.data$Species_Name, bind.data$Disposition)
+  
+  dispo_sp_percent_collision <- round(prop.column(dispo_sp_table) * 100, 2)
+  Bind_top10_spec <- names(sort(Bind_species_percent_collision, decreasing = TRUE)[1:10])
+  Bind.data.sub <- bind.data[bind.data$Species_Name %in% Bind_top10_spec,]
+  
+  Bind_Species_table_DF <- as.data.frame(Bind_species_table)
+  
+  colnames(Bind_Species_table_DF) <- c("how_obtained_code", "frequency")
+  Bind_Species_table_DF$percentage <- Bind_species_percent_collision
+  
+  Bind_top10_percent <- Bind_Species_table_DF[Bind_Species_table_DF$how_obtained_code %in% Bind_top10_spec,]
+  
+bind_dat_subset <- subset(bind.data, Species_Name %in% c('Bald Eagle','Barred Owl','Coopers Hawk',
+        'Eastern Screech Owl', 'Great Horned Owl', 'Mississippi Kite ', 'Osprey', 
+        'Red-Shouldered Hawk', 'Red-Tailed Hawk', 'Turkey Vulture'))
+ 
+
+  -----------------------------------------------------------------------------
+
+      
+
+  
+    
+    
+    
+-------------------------------------------------------------------------
+
