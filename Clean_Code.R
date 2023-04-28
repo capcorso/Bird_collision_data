@@ -229,13 +229,15 @@ df1_subset_top10sp <- df_1[df_1$Species_Name %in% top10sp_names_1,]
 sp_table_1_df <- as.data.frame(sp_table_1)
 colnames(sp_table_1_df ) <- c("Species_Name", "Frequency")
 sp_table_1_df$percentage <- sp_percent_collision_1
-df1_subset_top10sp <- sp_table_1_df [sp_table_1_df$Species_Name %in% top10sp_names_1,]
+df1_subset_top10sp <- sp_table_1_df [sp_table_1_df$Species_Name
+                                     %in% top10sp_names_1,]
 
 # In order to scale table 
 df1_subset_top10sp$percentage <- as.numeric(df1_subset_top10sp$percentage)
 
 # Model 1 
-ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), 
+                               y = percentage)) +
   geom_bar(stat = "identity") +
   xlab(" ") +
   ylab("%") +
@@ -245,14 +247,16 @@ ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percen
 nb.cols <- 10
 df1_model1_color <- colorRampPalette(brewer.pal(9, "Greens"))(10)
 
-ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), 
+                               y = percentage)) +
   geom_bar(stat = "identity", fill= df1_model1_color) +
   xlab(" ") +
   ylab("%") +
   ggtitle("Top 10 Species with most collisions 1992-2017")
 
 df1_top10_graph <-
-  ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+  ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), 
+                                 y = percentage)) +
   geom_bar(stat = "identity", fill= df1_model1_color) +
   xlab(" ") +
   ylab("%") +
@@ -263,7 +267,7 @@ df1_top10_graph <-
 --------------------------------------------------------------------------------
 #'Data Frame 2 Model 2  
 # Top 10 species with the most collisions by percent of collisions df_2
-  
+
 sp_table_2 <- table(df_2$Species_Name)
 sp_percent_collision_2 <- round(prop.table(sp_table_2) * 100, 2)
 top10sp_names_2 <- names(sort(sp_table_2, decreasing = TRUE)[1:10])
@@ -271,7 +275,8 @@ df2_subset_top10sp <- df_2[df_2$Species_Name %in% top10sp_names_2,]
 sp_table_2_df <- as.data.frame(sp_table_2)
 colnames(sp_table_2_df ) <- c("Species_Name", "Frequency")
 sp_table_2_df$percentage <- sp_percent_collision_2
-df2_subset_top10sp <- sp_table_2_df [sp_table_2_df$Species_Name %in% top10sp_names_2,]
+df2_subset_top10sp <- sp_table_2_df [sp_table_2_df$Species_Name 
+                                     %in% top10sp_names_2,]
 
 # In order to scale table 
 df2_subset_top10sp$percentage <- as.numeric(df2_subset_top10sp$percentage)
@@ -279,16 +284,15 @@ df2_subset_top10sp$percentage <- as.numeric(df2_subset_top10sp$percentage)
 # Lets make it Blue 
 df2_model2_color <- colorRampPalette(brewer.pal(9, "Blues"))(10)
 
-
 #Model 2 
-ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+ggplot(df2_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
   geom_bar(stat = "identity", fill= df2_model2_color) +
   xlab(" ") +
   ylab("%") +
   ggtitle("Top 10 Species with most collisions 2019-2023")
 
 df2_top10_graph <-
-  ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+  ggplot(df2_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
   geom_bar(stat = "identity", fill= df2_model2_color) +
   xlab(" ") +
   ylab("%") +
@@ -297,151 +301,211 @@ df2_top10_graph <-
 # Data Frame 2 Model 2-- Top 10 Species with most collisions 2019-2023 
 
 --------------------------------------------------------------------------------
-  
-
-
-
-
-
-
-
-
-
-  
-  
-  
-
-# Same species colsion bar graph for new data 
-new.sp_count <- table(new.data$Species_Name)
-new.sp_percent <- round(prop.table(new.sp_count) * 100, 2)
-new.top_sp <- names(sort(new.sp_count, decreasing = TRUE)[1:10])
-new.data_sub <- new.data[new.data$Species_Name %in% new.top_sp,]
-new.sp_df <- as.data.frame(new.sp_count)
-colnames(new.sp_df) <- c("how_obtained_code", "frequency")
-new.sp_df$percentage <- new.sp_percent
-new.df1_subset_top10sp <- new.sp_df[new.sp_df$how_obtained_code %in% new.top_sp,]
-
-mycolors.2 <- colorRampPalette(brewer.pal(8, "Blues"))(nb.cols)
-mycolors
-
-ggplot(new.df1_subset_top10sp, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
-  geom_bar(stat = "identity", fill= mycolors.2) +
-  xlab(" ") +
-  ylab("%") +
-  ggtitle("Top 10 Species with most collisions 2017-2023") 
-
-top_species_list <- c( )
-
-top_sp_data <- subset(new.data, Species %in% top_sp_list)
-
-__ This one doesnt work 
-ggplot(new.data, aes(x = Species, fill=cleaned.status)) +
-  geom_bar() +
-  xlab(" ") +
-  ylab("%") +
-  ggtitle("Top 10 Species with most collisions") 
-
-ggplot(new.data, aes(x = Species_Name, fill=cleaned.status)) +
-  geom_bar() +
-  xlab(" ") +
-  ylab("%") +
-  ggtitle("Species Collisions & Dispositions")
-
---------------------------------------------------------------------------------
-# Making columns similar names prior to binding 
-
-colnames(new.data)
-colnames(data)
-
-names(new.data)[names(new.data) == "Species"] <- "Species_Name"
-names(data)[names(data) == "Species_Abv"] <- "Species_Name"
-
-names(new.data)[names(new.data) == "Status"] <- "Disposition"
-
-colnames(data)
-colnames(new.data)
---------------------------------------------------------------------------------
-# Binding 
+#' Binding Data frame 1 and 2 to make Data frame 3
   
 library(plyr)
-rbind.fill(data, new.data)
+rbind.fill(df_1,df_2)
 
-bind.data <- rbind.fill(data, new.data)
---------------------------------------------------------------------------------
+# name the binded data data frame 3 -- df_3
+df_3 <- rbind.fill(df_1, df_2)
 
 -------------------------------------------------------------------------------
-#' Model Building 
-# 
-Bind_species_table <- table(bind.data$Species_Name)
-Bind_species_percent_collision <- round(prop.table(Bind_species_table) * 100, 2)
-Bind_top10_spec <- names(sort(Bind_species_percent_collision, decreasing = TRUE)[1:10])
-new.data_sub <- new.data[new.data$Species_Name %in% Bind_top10_spec,]
+#' Binded data Models 
+#
+#' Data Frame 3 Model 3
+# Top 10 species with the most collisions by percent of collisions binded data
 
-Bind_Species_table_DF <- as.data.frame(Bind_species_table)
+sp_table_3 <- table(df_3$Species_Name)
+sp_percent_collision_3 <- round(prop.table(sp_table_3) * 100, 2)
+top10sp_names_3 <- names(sort(sp_table_3, decreasing = TRUE)[1:10])
+df3_subset_top10sp <- df_3[df_3$Species_Name %in% top10sp_names_3,]
+sp_table_3_df <- as.data.frame(sp_table_3)
+colnames(sp_table_3_df ) <- c("Species_Name", "Frequency")
+sp_table_3_df$percentage <- sp_percent_collision_3
+df3_subset_top10sp <- sp_table_3_df [sp_table_3_df$Species_Name %in% top10sp_names_3,]
 
-colnames(Bind_Species_table_DF) <- c("how_obtained_code", "frequency")
-Bind_Species_table_DF$percentage <- Bind_species_percent_collision
-Bind_top10_percent <- Bind_Species_table_DF[Bind_Species_table_DF$how_obtained_code %in% Bind_top10_spec,]
+# In order to scale table 
+df3_subset_top10sp$percentage <- as.numeric(df3_subset_top10sp$percentage)
 
-ggplot(Bind_top10_percent, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
-  geom_bar(stat = "identity", fill= mycolors.2) +
+# Lets make it Purple  
+df3_model3_color <- colorRampPalette(brewer.pal(9, "Purples"))(10)
+
+#Model 3 
+ggplot(df3_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+  geom_bar(stat = "identity", fill= df3_model3_color) +
   xlab(" ") +
   ylab("%") +
-  ggtitle("Top 10 Species with most collisions combined data") 
+  ggtitle("Top 10 Species with most collisions 1992-2023")
 
-# 
+df3_top10_graph <-
+  ggplot(df3_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+  geom_bar(stat = "identity", fill= df3_model3_color) +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species with most collisions 1992 - 2023")
+
+# Data Frame 3 Model 3-- Top 10 Species with most collisions 1992-2023 
+
+-------------------------------------------------------------------------------
+#' Creating a top 10 species bar graph with disposition stats 
+#
+# Creating a data frame 3 subset to separate the top 10 collided species
+
+df3_subset <- subset(df_3, Species_Name %in% c('Red-Tailed Hawk',
+                                 'Barred Owl',
+                                 'Eastern Screech Owl',
+                                 'Eastern Screech Owl', 
+                                 'Great Horned Owl', 
+                                 'Mississippi Kite ', 
+                                 'Osprey', 
+                                 'Red-Shouldered Hawk', 
+                                 'Turkey Vulture', 
+                                 'Coopers Hawk', 
+                                 'Bald Eagle'))
+
+disposition_data <- df3_subset$Disposition
 
 
-#Barred Owl Collision Graph 
+ggplot(df3_subset, aes(x = Species_Name, fill= disposition_data)) +
+  geom_bar() +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species Collisions with disposition")
 
-Bar_Owl_subset <- subset(bind.data, Species_Name %in% c('Barred Owl'))
-clean_Bar_Owlsub <- Bar_Owl_subset[ , c("Species_Name", "Year.Admitted", 
+# sorting from most collisions to least 
+
+model_4 <-
+  ggplot(df3_subset, aes(x = 
+      factor(Species_Name, 
+      level=c('Red-Tailed Hawk', 'Barred Owl','Eastern Screech Owl', 
+              'Great Horned Owl', 'Osprey', 'Red-Shouldered Hawk', 
+              'Coopers Hawk', 'Mississippi Kite', 'Turkey Vulture',
+              'Bald Eagle')), fill= disposition_data)) +
+      geom_bar() +
+      xlab(" ") +
+      ylab("Collisions") +
+      labs(fill = "Disposition") +
+      ggtitle("Top 10 species collisions with disposition")
+
+Disposition_Collision_Graph <-
+  model_4 + coord_flip()
+-------------------------------------------------------------------------------
+#' Red-Tailed Hawk Collision graph 
+RTHW_subset <- subset(df_3, Species_Name %in% c('Red-Tailed Hawk'))
+RTHW_sub_subset <- RTHW_subset[ , c("Species_Name", "Year.Admitted", 
                                         "Disposition")]  
 
-Disposition <- add_Bar_Owl$Group.2
-add_Bar_Owl <- aggregate(clean_Bar_Owlsub$Species_Name, by=list(clean_Bar_Owlsub$Year.Admitted, 
-                                                                clean_Bar_Owlsub$Disposition, clean_Bar_Owlsub$Species_Name), FUN=length)
+agg_RTHW <- aggregate(RTHW_sub_subset$Species_Name, 
+                         by=list(RTHW_sub_subset$Year.Admitted, 
+                                 RTHW_sub_subset$Disposition, 
+                                 RTHW_sub_subset$Species_Name), 
+                         FUN=length)
 
-ggplot(add_Bar_Owl, aes(x =Group.1, y = x, color = Disposition)) +
+disp_RTHW <- agg_RTHW$Group.2
+
+model_5 <- 
+  ggplot(agg_RTHW, aes(x =Group.1, y = x, color = Disp_RTHW)) +
+  geom_point(size=4) +
+  xlab("Year Admitted") +
+  ylab("Collisions") + 
+  ggtitle("Red-Tailed Hawk Yearly Collisions")
+
+RTHW_Collision_Graph <-
+  model_5 + scale_color_discrete(name = "Disposition")
+
+-------------------------------------------------------------------------------
+#Barred Owl Collision Graph 
+
+Bar_Owl_subset <- subset(df_3, Species_Name %in% c('Barred Owl'))
+Bar_Owl_sub_subset <- Bar_Owl_subset[ , c("Species_Name", "Year.Admitted", 
+                                        "Disposition")]  
+
+agg_Bar_Owl <- aggregate(Bar_Owl_sub_subset$Species_Name, 
+                         by=list(Bar_Owl_sub_subset$Year.Admitted, 
+                                 Bar_Owl_sub_subset$Disposition, 
+                                 Bar_Owl_sub_subset$Species_Name), 
+                         FUN=length)
+
+disp_Bar_Owl <- add_Bar_Owl$Group.2
+
+model_6 <- 
+  ggplot(add_Bar_Owl, aes(x =Group.1, y = x, color = disp_Bar_Owl)) +
   geom_point(size=4) +
   xlab("Year Admitted") +
   ylab("Collisions") +
-  ggtitle("Barred Owl Collisions since 1991")
+  labs(fill = "Disposition") +
+  ggtitle("Barred Owl Yearly Collisions")
 
-Barred_Owl_Collision_Graph <- ggplot(add_Bar_Owl, aes(x =Group.1, y = x, color = Disposition)) +
+Barred_Owl_Collision_Graph <-
+  model_6 + scale_color_discrete(name = "Disposition")
+-------------------------------------------------------------------------------
+#' Eastern Screech Owl
+EASO_subset <- subset(df_3, Species_Name %in% c('Eastern Screech Owl'))
+EASO_sub_subset <- EASO_subset[ , c("Species_Name", "Year.Admitted", 
+                                    "Disposition")]  
+
+agg_EASO<- aggregate(EASO_sub_subset$Species_Name, 
+                      by=list(EASO_sub_subset$Year.Admitted, 
+                              EASO_sub_subset$Disposition, 
+                              EASO_sub_subset$Species_Name), 
+                      FUN=length)
+
+disp_EASO <- agg_EASO$Group.2
+
+model_7 <- 
+  ggplot(agg_EASO, aes(x =Group.1, y = x, color = disp_EASO)) +
   geom_point(size=4) +
   xlab("Year Admitted") +
-  ylab("Collisions") +
-  ggtitle("Barred Owl Collisions since 1991")
+  ylab("Collisions") + 
+  ggtitle("Eastern Screech Owl Yearly Collisions")
 
+EASO_Collision_Graph <-
+  model_7 + scale_color_discrete(name = "Disposition")
 
+-------------------------------------------------------------------------------
+#' Great Horned Owl Collision graph 
+GHOW_subset <- subset(df_3, Species_Name %in% c('Great Horned Owl'))
+GHOW_sub_subset <- GHOW_subset[ , c("Species_Name", "Year.Admitted", 
+                                    "Disposition")]  
 
--------------------
-  Lets get some stats 
-Survivorship = c()
-for(i in seq(1, nrow(bind.data))){
-  if(bind.data$Disposition[i]=="Died") 
-    Survivorship[i] = 0
-  else if(bind.data$Disposition[i]== "Survived")
-    Survivorship[i] = 1 
-  else if(bind.data$Disposition[i]== "Transfer")
-    Survivorship[i] = NA
-}
-bind.data = cbind(bind.data, Survivorship)
-Survivorship = bind.data$Survivorship
+agg_GHOW <- aggregate(GHOW_sub_subset$Species_Name, 
+                      by=list(GHOW_sub_subset$Year.Admitted, 
+                              GHOW_sub_subset$Disposition, 
+                              GHOW_sub_subset$Species_Name), 
+                      FUN=length)
 
-glm_bind =glm(bind.data$Survivorship ~ bind.data$Species_Name + bind.data$Disposition)
+disp_GHOW <- agg_GHOW$Group.2
 
-summary(glm_bind)
-plot(glm_bind)
+model_8 <- 
+  ggplot(agg_GHOW, aes(x =Group.1, y = x, color = Disp_GHOW)) +
+  geom_point(size=4) +
+  xlab("Year Admitted") +
+  ylab("Collisions") + 
+  ggtitle("Great Horned Owl Yearly Collisions")
 
-glm_full = glm(full_set$Survive_full ~ full_set$Species_Abv + bind.data$Disposition)
-summary(glm_full)
-plot(glm_full)
+GHOW_Collision_Graph <-
+  model_5 + scale_color_discrete(name = "Disposition")
 
+-------------------------------------------------------------------------------
+#' Graphs 
 
+  df1_top10_graph
 
-
+  df2_top10_graph
+  
+  df3_top10_graph
+  
+  Disposition_Collision_Graph
+  
+  Barred_Owl_Collision_Graph 
+  
+  RTHW_Collision_Graph
+  
+  EASO_Collision_Graph
+  
+  GHOW_Collision_Graph
+  
+  
 
 
 
