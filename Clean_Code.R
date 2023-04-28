@@ -41,7 +41,7 @@ colnames(df_1)
 colnames(df_2) 
 
 # Columns shared are Species_Name and Disposition 
-
+--------------------------------------------------------------------------------
 
 #' Data Frame 1 Cleaning 
 #'
@@ -216,7 +216,11 @@ for(i in seq(1, nrow(df_2))){
   else if(df_2$Disposition[i]== "Reh")
     df_2$Disposition[i] = "Transfer"
 }
+sort(table(df_1$Species_Name))
+sort(table(df_2$Species_Name))
 
+table(df_1$Disposition)
+table(df_2$Disposition)
 --------------------------------------------------------------------------------
 
 #'Data Frame 1 Model 1  
@@ -374,6 +378,17 @@ ggplot(df3_subset, aes(x = Species_Name, fill= disposition_data)) +
 
 # sorting from most collisions to least 
 
+ggplot(df3_subset, aes(x = factor(Species_Name, 
+                  level=c('Red-Tailed Hawk', 'Barred Owl','Eastern Screech Owl', 
+                  'Great Horned Owl', 'Osprey', 'Red-Shouldered Hawk', 
+                  'Coopers Hawk', 'Mississippi Kite', 'Turkey Vulture',
+                  'Bald Eagle')), fill= disposition_data)) +
+  geom_bar() +
+  xlab(" ") +
+  ylab("Collisions") +
+  labs(fill = "Disposition") +
+  ggtitle("Top 10 species collisions with disposition")
+
 model_4 <-
   ggplot(df3_subset, aes(x = 
       factor(Species_Name, 
@@ -389,6 +404,8 @@ model_4 <-
 
 Disposition_Collision_Graph <-
   model_4 + coord_flip()
+
+Disposition_Collision_Graph
 -------------------------------------------------------------------------------
 #' Red-Tailed Hawk Collision graph 
 RTHW_subset <- subset(df_3, Species_Name %in% c('Red-Tailed Hawk'))
@@ -404,7 +421,7 @@ agg_RTHW <- aggregate(RTHW_sub_subset$Species_Name,
 disp_RTHW <- agg_RTHW$Group.2
 
 model_5 <- 
-  ggplot(agg_RTHW, aes(x =Group.1, y = x, color = Disp_RTHW)) +
+  ggplot(agg_RTHW, aes(x =Group.1, y = x, color = disp_RTHW)) +
   geom_point(size=4) +
   xlab("Year Admitted") +
   ylab("Collisions") + 
@@ -413,6 +430,7 @@ model_5 <-
 RTHW_Collision_Graph <-
   model_5 + scale_color_discrete(name = "Disposition")
 
+RTHW_Collision_Graph
 -------------------------------------------------------------------------------
 #Barred Owl Collision Graph 
 
@@ -426,10 +444,10 @@ agg_Bar_Owl <- aggregate(Bar_Owl_sub_subset$Species_Name,
                                  Bar_Owl_sub_subset$Species_Name), 
                          FUN=length)
 
-disp_Bar_Owl <- add_Bar_Owl$Group.2
+disp_Bar_Owl <- agg_Bar_Owl$Group.2
 
 model_6 <- 
-  ggplot(add_Bar_Owl, aes(x =Group.1, y = x, color = disp_Bar_Owl)) +
+  ggplot(agg_Bar_Owl, aes(x =Group.1, y = x, color = disp_Bar_Owl)) +
   geom_point(size=4) +
   xlab("Year Admitted") +
   ylab("Collisions") +
@@ -438,6 +456,8 @@ model_6 <-
 
 Barred_Owl_Collision_Graph <-
   model_6 + scale_color_discrete(name = "Disposition")
+
+Barred_Owl_Collision_Graph
 -------------------------------------------------------------------------------
 #' Eastern Screech Owl
 EASO_subset <- subset(df_3, Species_Name %in% c('Eastern Screech Owl'))
@@ -462,6 +482,7 @@ model_7 <-
 EASO_Collision_Graph <-
   model_7 + scale_color_discrete(name = "Disposition")
 
+EASO_Collision_Graph
 -------------------------------------------------------------------------------
 #' Great Horned Owl Collision graph 
 GHOW_subset <- subset(df_3, Species_Name %in% c('Great Horned Owl'))
@@ -486,6 +507,7 @@ model_8 <-
 GHOW_Collision_Graph <-
   model_5 + scale_color_discrete(name = "Disposition")
 
+GHOW_Collision_Graph
 -------------------------------------------------------------------------------
 #' Graphs 
 
