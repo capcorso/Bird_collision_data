@@ -11,8 +11,9 @@ library(tidyverse)
 
 url <- "https://raw.githubusercontent.com/capcorso/Bird-Collision/main/Old.ACC.dat.csv"
 data <- read.csv(url)
-
-
+--------------------------------------------------------------------------------
+#' Data exploration
+#' 
 # How many entries are there 
 n_rows <- nrow(data)
 cat("Number of data entries:", n_rows)
@@ -23,15 +24,11 @@ cat("Number of data entries:", n_rows)
 species_list = data$Species_Abv
 list(species_list)
 
-#' cleaning data 
-#' 
 # species count 
 count_species = table(species_list)
 sort(count_species)
-
 species_list
-# Look at distribution 
-pie(count_species)
+
 
 
 

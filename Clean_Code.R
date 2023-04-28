@@ -10,105 +10,306 @@ library(RColorBrewer)
 library(tidyverse)
 library(plyr)
 
-data <- read.csv('./data/Old.ACC.dat.csv')
+df_1 <- read.csv('./data/Old.ACC.dat.csv')
 
-url.2 <- "https://raw.githubusercontent.com/capcorso/Bird-Collision/main/ACC.data%20-%20Sheet1.csv"
-new.data <- read_csv('./data/new.data.csv (1).csv')
+df_2 <- read_csv('./data/new.data.csv (1).csv')
 
 --------------------------------------------------------------------------------
 #' Old Data Exploration
 
-n_rows <- nrow(data)
-cat("Number of data entries:", n_rows)
+nrow(df_1)
 #  9080 data entries 
 
 # List Species 
-species_list = data$Species_Abv
-list(species_list)
+species_list_1 = df_1$Species_Abv
+list(species_list_1)
 
 # species count 
-count_species = table(species_list)
-sort(count_species)
+sort(table(species_list_1))
+--------------------------------------------------------------------------------
+#'' Cleaning Data Frames
 
-# Top 10 species with the most collisions by percent of collisions 
+# Making Species, and disposition columns the same name between data frame's, 
+ #in order to bind later
 
-sp_count <- table(data$Species_Abv)
-sp_percent <- round(prop.table(sp_count) * 100, 2)
-top_sp <- names(sort(sp_count, decreasing = TRUE)[1:10])
-data_sub <- data[data$Species_Abv %in% top_sp,]
-sp_df <- as.data.frame(sp_count)
-colnames(sp_df) <- c("how_obtained_code", "frequency")
-sp_df$percentage <- sp_percent
-top_sp_df <- sp_df[sp_df$how_obtained_code %in% top_sp,]
+names(df_2)[names(df_2) == "Species"] <- "Species_Name"
+names(df_1)[names(df_1) == "Species_Abv"] <- "Species_Name"
 
-nb.cols <- 10
-mycolors <- colorRampPalette(brewer.pal(9, "Greens"))(nb.cols)
-mycolors
+names(df_2)[names(df_2) == "Status"] <- "Disposition"
 
-ggplot(top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
-  geom_bar(stat = "identity", fill= mycolors) +
-  xlab(" ") +
-  ylab("%") +
-  ggtitle("Top 10 Species with most collisions 1992-2017 ") 
+colnames(df_1)
+colnames(df_2) 
 
-# Replacing species code with common name, 're' 
-cleaned.species <- with(data, factor(Species_Name, 
-                                     levels = c('RTHA', 'BDOW', 'EASO', 'GHOW', 'OSPR', 'RSHA', 'COHA', 'MIKI', 'TUVU', 'BAEA'), 
-                                     labels = c("Red Tailed Hawk", "Barred Owl", "Eastern Screech Owl", "Great Horned Owl", "Osprey", "Red-Shouldered Hawk ", "Cooper's Hawk",
-                                                "Mississippi Kite", "Turkey Vulture", "Bald Eagle")))
-re.count <- table(cleaned.species)
-re_percent <- round(prop.table(re.count) * 100, 2)
-re.top_sp <- names(sort(re.count, decreasing = TRUE)[1:10])
-re.data_sub <- data[cleaned.species %in% re.top_sp,]
-re.sp_df <- as.data.frame(re.count)
+# Columns shared are Species_Name and Disposition 
 
-colnames(re.sp_df) <- c("how_obtained_code", "frequency")
-re.sp_df$percentage <- re_percent
-re.top_sp_df <- re.sp_df[re.sp_df$how_obtained_code %in% re.top_sp,]
 
-ggplot(re.top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
-  geom_bar(stat = "identity", fill= mycolors) +
-  xlab(" ") +
-  ylab("%") +
-  ggtitle("Top 10 Species with most collisions 1992-2017 ") 
+#' Data Frame 1 Cleaning 
+#'
+# Species Name's
 
-# Looking at Outcome
-cleaned.outcome <- with(data, factor(Disposition, 
-                                     levels = c('RELEASED', 'NR/EUTHANIZED', 'TRANSFERRED', 'EUTHANIZED', 'NR/DIED', 'DIED', 'TRANSFERRED OUT'), 
-                                     labels = c("Survived", "Dead", "Transferred", "Dead", "Dead", "Dead", "Transferred")))
-cleaned.outcome
-Dispo <- table(data$Disposition)
-list(data$Disposition)
+sort(table(df_1$Species_Name))
 
-outcome.list <-list(cleaned.outcome)
-table(outcome.list)
+  for(i in seq(1, nrow(df_1)))  {
+    if(df_1$Species_Name[i] == "RTHA")
+      df_1$Species_Name[i] = "Red-Tailed Hawk"
+    else if(df_1$Species_Name[i] == "BDOW")
+      df_1$Species_Name[i] = "Barred Owl"
+    else if(df_1$Species_Name[i] == "EASO")
+      df_1$Species_Name[i] = "Eastern Screech Owl"
+    else if(df_1$Species_Name[i] == "GHOW")
+      df_1$Species_Name[i] = "Great Horned Owl"
+    else if(df_1$Species_Name[i] == "OSPR")
+      df_1$Species_Name[i] = "Osprey"
+    else if(df_1$Species_Name[i] == "RSHA")
+      df_1$Species_Name[i] = "Red-Shouldered Hawk"
+    else if(df_1$Species_Name[i] == "COHA")
+      df_1$Species_Name[i] = "Coopers Hawk"
+    else if(df_1$Species_Name[i] == "MIKI")
+      df_1$Species_Name[i] = "Mississippi Kite"
+    else if(df_1$Species_Name[i] == "TUVU")
+      df_1$Species_Name[i] = "Turkey Vulture"
+    else if(df_1$Species_Name[i] == "BAEA")
+      df_1$Species_Name[i] = "Bald Eagle"
+    else if(df_1$Species_Name[i] == "BLVU")
+      df_1$Species_Name[i] = "Black Vulture"
+    else if(df_1$Species_Name[i] == "BRPE")
+      df_1$Species_Name[i] = "Brown Pelican"
+    else if(df_1$Species_Name[i] == "AMKE")
+      df_1$Species_Name[i] = "American Kestrel"
+    else if(df_1$Species_Name[i] == "SSHA")
+      df_1$Species_Name[i] = "Sharp-shinned Hawk"
+    else if(df_1$Species_Name[i] == "GBHE")
+      df_1$Species_Name[i] = "Great Blue Heron"
+    else if(df_1$Species_Name[i] == "COLO")
+      df_1$Species_Name[i] = "Common Loon"
+    else if(df_1$Species_Name[i] == "LAGU")
+      df_1$Species_Name[i] = "Laughing Gull"
+    else if(df_1$Species_Name[i] == "BWHA")
+      df_1$Species_Name[i] = "Broad-winged Hawk"
+    else if(df_1$Species_Name[i] == "BCNH")
+      df_1$Species_Name[i] = "Black-crowned Night-Heron"
+    else if(df_1$Species_Name[i] == "BNOW")
+      df_1$Species_Name[i] = "Barn Owl"
+    else if(df_1$Species_Name[i] == "BLSC")
+      df_1$Species_Name[i] = "Black Scoter"
+    else if(df_1$Species_Name[i] == "DCCO")
+      df_1$Species_Name[i] = "Double-crested Cormorant"
+    else if(df_1$Species_Name[i] == "GREG")
+      df_1$Species_Name[i] = "Great Egret"
+    else if(df_1$Species_Name[i] == "CLRA")
+      df_1$Species_Name[i] = "Clapper Rail"
+  }
 
-barplot(table(outcome.list))
+# Disposition 
+
+sort(table(df_1$Disposition))
+
+for(i in seq(1, nrow(df_1))){
+  if(df_1$Disposition[i]== "Died"| 
+     df_1$Disposition[i]== "DIED"| 
+     df_1$Disposition[i]=="ESCAPED"|
+     df_1$Disposition[i]== "EUTHANIZED"|
+     df_1$Disposition[i]== "NR/DIED"| 
+     df_1$Disposition[i]== "NR/ESCAPED"| 
+     df_1$Disposition[i]== "NR/EUTHANIZED"| 
+     df_1$Disposition[i]== "TRANSFERRED/DIED"|
+     df_1$Disposition[i]== "TRANSFERRED/EUTHANIZED"| 
+     df_1$Disposition[i]=="D"| 
+     df_1$Disposition[i]=="D24"| 
+     df_1$Disposition[i]=="DOA"| 
+     df_1$Disposition[i]=="E"| 
+     df_1$Disposition[i]== "Euthanized"|
+     df_1$Disposition[i]=="E24"| 
+     df_1$Disposition[i]=="EOA")
+  df_1$Disposition[i] = "Died"
+  else if(df_1$Disposition[i] == "Active"| 
+          df_1$Disposition[i]=="ESCAPED"| 
+          df_1$Disposition[i]=="NR/ESCAPED"| 
+          df_1$Disposition[i]== "NR/RELEASED"| 
+          df_1$Disposition[i]=="Released"| 
+          df_1$Disposition[i]=="RELEASED"| 
+          df_1$Disposition[i]=="Self-Release"| 
+          df_1$Disposition[i]=="R")
+    df_1$Disposition[i] = "Survived"
+  else if(df_1$Disposition[i]== "TRANSFER OUT"| 
+          df_1$Disposition[i]=="Transferred"|
+          df_1$Disposition[i]=="TRANSFERRED"| 
+          df_1$Disposition[i]=="TRANSFERRED OUT"| 
+          df_1$Disposition[i]=="Reh")
+    df_1$Disposition[i] = "Transfer"
+  else if(df_1$Disposition[i]== ""|
+          df_1$Disposition[i]== "PENDING")
+    df_1$Disposition[i] = "Unknown"
+}
+
+#' Data Frame 2
+
+# Species Name's
+
+sort(table(df_2$Species_Name))
+
+for(i in seq(1, nrow(df_2)))  {
+  if(df_2$Species_Name[i] == "RTHA")
+    df_2$Species_Name[i] = "Red-Tailed Hawk"
+  else if(df_2$Species_Name[i] == "BDOW")
+    df_2$Species_Name[i] = "Barred Owl"
+  else if(df_2$Species_Name[i] == "EASO")
+    df_2$Species_Name[i] = "Eastern Screech Owl"
+  else if(df_2$Species_Name[i] == "GHOW")
+    df_2$Species_Name[i] = "Great Horned Owl"
+  else if(df_2$Species_Name[i] == "OSPR")
+    df_2$Species_Name[i] = "Osprey"
+  else if(df_2$Species_Name[i] == "RSHA")
+    df_2$Species_Name[i] = "Red-Shouldered Hawk"
+  else if(df_2$Species_Name[i] == "COHA")
+    df_2$Species_Name[i] = "Coopers Hawk"
+  else if(df_2$Species_Name[i] == "MIKI")
+    df_2$Species_Name[i] = "Mississippi Kite"
+  else if(df_2$Species_Name[i] == "TUVU")
+    df_2$Species_Name[i] = "Turkey Vulture"
+  else if(df_2$Species_Name[i] == "BAEA")
+    df_2$Species_Name[i] = "Bald Eagle"
+  else if(df_2$Species_Name[i] == "BLVU")
+    df_2$Species_Name[i] = "Black Vulture"
+  else if(df_2$Species_Name[i] == "BRPE")
+    df_2$Species_Name[i] = "Brown Pelican"
+  else if(df_2$Species_Name[i] == "AMKE")
+    df_2$Species_Name[i] = "American Kestrel"
+  else if(df_2$Species_Name[i] == "SSHA")
+    df_2$Species_Name[i] = "Sharp-shinned Hawk"
+  else if(df_2$Species_Name[i] == "GBHE")
+    df_2$Species_Name[i] = "Great Blue Heron"
+  else if(df_2$Species_Name[i] == "COLO")
+    df_2$Species_Name[i] = "Common Loon"
+  else if(df_2$Species_Name[i] == "LAGU")
+    df_2$Species_Name[i] = "Laughing Gull"
+  else if(df_2$Species_Name[i] == "BWHA")
+    df_2$Species_Name[i] = "Broad-winged Hawk"
+  else if(df_2$Species_Name[i] == "BCNH")
+    df_2$Species_Name[i] = "Black-crowned Night-Heron"
+  else if(df_2$Species_Name[i] == "BNOW")
+    df_2$Species_Name[i] = "Barn Owl"
+  else if(df_2$Species_Name[i] == "BLSC")
+    df_2$Species_Name[i] = "Black Scoter"
+  else if(df_2$Species_Name[i] == "DCCO")
+    df_2$Species_Name[i] = "Double-crested Cormorant"
+  else if(df_2$Species_Name[i] == "GREG")
+    df_2$Species_Name[i] = "Great Egret"
+  else if(df_2$Species_Name[i] == "CLRA")
+    df_2$Species_Name[i] = "Clapper Rail"
+}
+
+# Disposition 
+
+table(df_2$Disposition)
+
+for(i in seq(1, nrow(df_2))){
+  if(df_2$Disposition[i]=="D"| 
+     df_2$Disposition[i]=="D24"| 
+     df_2$Disposition[i]=="DOA"| 
+     df_2$Disposition[i]=="E"|
+     df_2$Disposition[i]=="E24"| 
+     df_2$Disposition[i]=="EOA")
+  df_2$Disposition[i] = "Died"
+  else if(df_2$Disposition[i]=="R")
+    df_2$Disposition[i] = "Survived"
+  else if(df_2$Disposition[i]== "Reh")
+    df_2$Disposition[i] = "Transfer"
+}
 
 --------------------------------------------------------------------------------
-#' New Data Exploration 'new'
 
-# New data Species List 
-new.sp.list <- new.data$Species_Name
-list(new.sp.list)
-ct.new.sp <- table(new.sp.list)
-sort(ct.new.sp)
+#'Data Frame 1 Model 1  
+# Top 10 species with the most collisions by percent of collisions df_1
 
-# look at outcome 
-outcome <- new.data$Disposition
-list(outcome)
-outcome.ct <- table(outcome)
-sort(outcome.ct)
+sp_table_1 <- table(df_1$Species_Name)
+sp_percent_collision_1 <- round(prop.table(sp_table_1) * 100, 2)
+top10sp_names_1 <- names(sort(sp_table_1, decreasing = TRUE)[1:10])
+df1_subset_top10sp <- df_1[df_1$Species_Name %in% top10sp_names_1,]
+sp_table_1_df <- as.data.frame(sp_table_1)
+colnames(sp_table_1_df ) <- c("Species_Name", "Frequency")
+sp_table_1_df$percentage <- sp_percent_collision_1
+df1_subset_top10sp <- sp_table_1_df [sp_table_1_df$Species_Name %in% top10sp_names_1,]
 
-# Grouping euthanized and dead with - dead. And Released with -Survive, Still in rehab is NA
-cleaned.status <- with(new.data, factor(Disposition, 
-                                        levels = c('DOA', 'R', 'D', 'EOA', 'D24', 'E24', 'E', 'Reh'), 
-                                        labels = c("Dead", "Survive", "Dead", "Dead", "Dead", "Dead", "Dead", "Rehab")))
+# In order to scale table 
+df1_subset_top10sp$percentage <- as.numeric(df1_subset_top10sp$percentage)
 
-cleaned.status
-Survivorship <- table(cleaned.status)
-Survivorship
-barplot.default(Survivorship)
+# Model 1 
+ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+  geom_bar(stat = "identity") +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species with most collisions 1992-2017 ") 
+
+# Lets make it green 
+nb.cols <- 10
+df1_model1_color <- colorRampPalette(brewer.pal(9, "Greens"))(10)
+
+ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+  geom_bar(stat = "identity", fill= df1_model1_color) +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species with most collisions 1992-2017")
+
+df1_top10_graph <-
+  ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+  geom_bar(stat = "identity", fill= df1_model1_color) +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species with most collisions 1992-2017") 
+
+# Data Frame 1 Model 1-- Top 10 Species with most collisions 1992-2017 
+
+--------------------------------------------------------------------------------
+#'Data Frame 2 Model 2  
+# Top 10 species with the most collisions by percent of collisions df_2
+  
+sp_table_2 <- table(df_2$Species_Name)
+sp_percent_collision_2 <- round(prop.table(sp_table_2) * 100, 2)
+top10sp_names_2 <- names(sort(sp_table_2, decreasing = TRUE)[1:10])
+df2_subset_top10sp <- df_2[df_2$Species_Name %in% top10sp_names_2,]
+sp_table_2_df <- as.data.frame(sp_table_2)
+colnames(sp_table_2_df ) <- c("Species_Name", "Frequency")
+sp_table_2_df$percentage <- sp_percent_collision_2
+df2_subset_top10sp <- sp_table_2_df [sp_table_2_df$Species_Name %in% top10sp_names_2,]
+
+# In order to scale table 
+df2_subset_top10sp$percentage <- as.numeric(df2_subset_top10sp$percentage)
+
+# Lets make it Blue 
+df2_model2_color <- colorRampPalette(brewer.pal(9, "Blues"))(10)
+
+
+#Model 2 
+ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+  geom_bar(stat = "identity", fill= df2_model2_color) +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species with most collisions 2019-2023")
+
+df2_top10_graph <-
+  ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
+  geom_bar(stat = "identity", fill= df2_model2_color) +
+  xlab(" ") +
+  ylab("%") +
+  ggtitle("Top 10 Species with most collisions 2019-2023")
+
+# Data Frame 2 Model 2-- Top 10 Species with most collisions 2019-2023 
+
+--------------------------------------------------------------------------------
+  
+
+
+
+
+
+
+
+
+
+  
+  
+  
 
 # Same species colsion bar graph for new data 
 new.sp_count <- table(new.data$Species_Name)
@@ -118,12 +319,12 @@ new.data_sub <- new.data[new.data$Species_Name %in% new.top_sp,]
 new.sp_df <- as.data.frame(new.sp_count)
 colnames(new.sp_df) <- c("how_obtained_code", "frequency")
 new.sp_df$percentage <- new.sp_percent
-new.top_sp_df <- new.sp_df[new.sp_df$how_obtained_code %in% new.top_sp,]
+new.df1_subset_top10sp <- new.sp_df[new.sp_df$how_obtained_code %in% new.top_sp,]
 
 mycolors.2 <- colorRampPalette(brewer.pal(8, "Blues"))(nb.cols)
 mycolors
 
-ggplot(new.top_sp_df, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
+ggplot(new.df1_subset_top10sp, aes(x = reorder(how_obtained_code, -frequency), y = percentage)) +
   geom_bar(stat = "identity", fill= mycolors.2) +
   xlab(" ") +
   ylab("%") +
@@ -167,99 +368,6 @@ rbind.fill(data, new.data)
 
 bind.data <- rbind.fill(data, new.data)
 --------------------------------------------------------------------------------
-# Filling species names in for species abreviations
-
-  for(i in seq(1, nrow(data)))  {
-    if(data$Species_Abv[i] == "RTHA")
-      data$Species_Abv[i] = "Red-Tailed Hawk"
-    else if(data$Species_Abv[i] == "BDOW")
-      data$Species_Abv[i] = "Barred Owl"
-    else if(data$Species_Abv[i] == "EASO")
-      data$Species_Abv[i] = "Eastern Screech Owl"
-    else if(data$Species_Abv[i] == "GHOW")
-      data$Species_Abv[i] = "Great Horned Owl"
-    else if(data$Species_Abv[i] == "OSPR")
-      data$Species_Abv[i] = "Osprey"
-    else if(data$Species_Abv[i] == "RSHA")
-      data$Species_Abv[i] = "Red-Shouldered Hawk"
-    else if(data$Species_Abv[i] == "COHA")
-      data$Species_Abv[i] = "Coopers Hawk"
-    else if(data$Species_Abv[i] == "MIKI")
-      data$Species_Abv[i] = "Mississippi Kite"
-    else if(data$Species_Abv[i] == "TUVU")
-      data$Species_Abv[i] = "Turkey Vulture"
-    else if(data$Species_Abv[i] == "BAEA")
-      data$Species_Abv[i] = "Bald Eagle"
-    else if(data$Species_Abv[i] == "BLVU")
-      data$Species_Abv[i] = "Black Vulture"
-    else if(data$Species_Abv[i] == "BRPE")
-      data$Species_Abv[i] = "Brown Pelican"
-    else if(data$Species_Abv[i] == "AMKE")
-      data$Species_Abv[i] = "American Kestrel"
-    else if(data$Species_Abv[i] == "SSHA")
-      data$Species_Abv[i] = "Sharp-shinned Hawk"
-    else if(data$Species_Abv[i] == "GBHE")
-      data$Species_Abv[i] = "Great Blue Heron"
-    else if(data$Species_Abv[i] == "COLO")
-      data$Species_Abv[i] = "Common Loon"
-    else if(data$Species_Abv[i] == "LAGU")
-      data$Species_Abv[i] = "Laughing Gull"
-    else if(data$Species_Abv[i] == "BWHA")
-      data$Species_Abv[i] = "Broad-winged Hawk"
-    else if(data$Species_Abv[i] == "BCNH")
-      data$Species_Abv[i] = "Black-crowned Night-Heron"
-    else if(data$Species_Abv[i] == "BNOW")
-      data$Species_Abv[i] = "Barn Owl"
-    else if(data$Species_Abv[i] == "BLSC")
-      data$Species_Abv[i] = "Black Scoter"
-    else if(data$Species_Abv[i] == "DCCO")
-      data$Species_Abv[i] = "Double-crested Cormorant"
-    else if(data$Species_Abv[i] == "GREG")
-      data$Species_Abv[i] = "Great Egret"
-    else if(data$Species_Abv[i] == "CLRA")
-      data$Species_Abv[i] = "Clapper Rail"
-  }
-
-# Disposition cleaning 
-
-for(i in seq(1, nrow(bind.data))){
-  if(bind.data$Disposition[i]== "Died"| 
-     bind.data$Disposition[i]== "DIED"| 
-     bind.data$Disposition[i]=="ESCAPED"|
-     bind.data$Disposition[i]== "EUTHANIZED"|
-     bind.data$Disposition[i]== "NR/DIED"| 
-     bind.data$Disposition[i]== "NR/ESCAPED"| 
-     bind.data$Disposition[i]== "NR/EUTHANIZED"| 
-     bind.data$Disposition[i]== "TRANSFERRED/DIED"|
-     bind.data$Disposition[i]== "TRANSFERRED/EUTHANIZED"| 
-     bind.data$Disposition[i]=="D"| 
-     bind.data$Disposition[i]=="D24"| 
-     bind.data$Disposition[i]=="DOA"| 
-     bind.data$Disposition[i]=="E"| 
-     bind.data$Disposition[i]== "Euthanized"|
-     bind.data$Disposition[i]=="E24"| 
-     bind.data$Disposition[i]=="EOA")
-  bind.data$Disposition[i] = "Died"
-  else if(bind.data$Disposition[i] == "Active"| 
-          bind.data$Disposition[i]=="ESCAPED"| 
-          bind.data$Disposition[i]=="NR/ESCAPED"| 
-          bind.data$Disposition[i]== "NR/RELEASED"| 
-          bind.data$Disposition[i]=="Released"| 
-          bind.data$Disposition[i]=="RELEASED"| 
-          bind.data$Disposition[i]=="Self-Release"| 
-          bind.data$Disposition[i]=="R")
-    bind.data$Disposition[i] = "Survived"
-  else if(bind.data$Disposition[i]== "TRANSFER OUT"| 
-          bind.data$Disposition[i]=="Transferred"|
-          bind.data$Disposition[i]=="TRANSFERRED"| 
-          bind.data$Disposition[i]=="TRANSFERRED OUT"| 
-          bind.data$Disposition[i]=="Reh"|
-          bind.data$Disposition[i]== "PENDING")
-    bind.data$Disposition[i] = "Transfer"
-}
-
-
-
 
 -------------------------------------------------------------------------------
 #' Model Building 
