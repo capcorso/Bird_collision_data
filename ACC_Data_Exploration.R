@@ -225,7 +225,8 @@ table(df_2$Disposition)
 --------------------------------------------------------------------------------
 
 #'Data Frame 1 Model 1  
-# Top 10 species with the most collisions by percent of collisions df_1
+
+#Top 10 species with the most collisions by percent of collisions df_1
 
 sp_table_1 <- table(df_1$Species_Name)
 sp_percent_collision_1 <- round(prop.table(sp_table_1) * 100, 2)
@@ -237,10 +238,10 @@ sp_table_1_df$percentage <- sp_percent_collision_1
 df1_subset_top10sp <- sp_table_1_df [sp_table_1_df$Species_Name
                                      %in% top10sp_names_1,]
 
-# In order to scale table 
+#In order to scale table 
 df1_subset_top10sp$percentage <- as.numeric(df1_subset_top10sp$percentage)
 
-# Model 1 
+#Model 1 
 ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), 
                                y = percentage)) +
   geom_bar(stat = "identity") +
@@ -248,7 +249,7 @@ ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency),
   ylab("%") +
   ggtitle("Top 10 Species with most collisions 1992-2017 ") 
 
-# Lets make it green 
+#Lets make it green 
 nb.cols <- 10
 df1_model1_color <- colorRampPalette(brewer.pal(9, "Greens"))(10)
 
@@ -260,12 +261,12 @@ df1_top10_graph <-
   ylab("%") +
   ggtitle("Top 10 Species with most collisions 1992-2017") 
 
-# Data Frame 1 Model 1-- Top 10 Species with most collisions 1992-2017 
+#Data Frame 1 Model 1-- Top 10 Species with most collisions 1992-2017 
 df1_top10_graph
 
 --------------------------------------------------------------------------------
 #'Data Frame 2 Model 2  
-# Top 10 species with the most collisions by percent of collisions df_2
+#'Top 10 species with the most collisions by percent of collisions df_2
 
 sp_table_2 <- table(df_2$Species_Name)
 sp_percent_collision_2 <- round(prop.table(sp_table_2) * 100, 2)
@@ -277,10 +278,10 @@ sp_table_2_df$percentage <- sp_percent_collision_2
 df2_subset_top10sp <- sp_table_2_df [sp_table_2_df$Species_Name 
                                      %in% top10sp_names_2,]
 
-# In order to scale table 
+#In order to scale table 
 df2_subset_top10sp$percentage <- as.numeric(df2_subset_top10sp$percentage)
 
-# Lets make it Blue 
+#Lets make it Blue 
 df2_model2_color <- colorRampPalette(brewer.pal(9, "Blues"))(10)
 
 #Model 2 
@@ -297,20 +298,21 @@ df2_top10_graph <-
 df2_top10_graph
 
 --------------------------------------------------------------------------------
-#' Binding Data frame 1 and 2 to make Data frame 3
+#Binding Data frame 1 and 2 to make Data frame 3
   
 library(plyr)
 rbind.fill(df_1,df_2)
 
-# name the binded data data frame 3 -- df_3
+#name the binded data data frame 3 -- df_3
 df_3 <- rbind.fill(df_1, df_2)
 
 -------------------------------------------------------------------------------
-#' Binded data Models 
+#'Binded data Models 
 #
-#' Data Frame 3 Model 3
-# Top 10 species with the most collisions by percent of collisions binded data
-
+#'Data Frame 3 Model 3
+#'Top 10 species with the most collisions by percent of collisions binded data
+#
+  
 sp_table_3 <- table(df_3$Species_Name)
 sp_percent_collision_3 <- round(prop.table(sp_table_3) * 100, 2)
 top10sp_names_3 <- names(sort(sp_table_3, decreasing = TRUE)[1:10])
@@ -320,10 +322,10 @@ colnames(sp_table_3_df ) <- c("Species_Name", "Frequency")
 sp_table_3_df$percentage <- sp_percent_collision_3
 df3_subset_top10sp <- sp_table_3_df [sp_table_3_df$Species_Name %in% top10sp_names_3,]
 
-# In order to scale table 
+#In order to scale table 
 df3_subset_top10sp$percentage <- as.numeric(df3_subset_top10sp$percentage)
 
-# Lets make it Purple  
+#Lets make it Purple  
 df3_model3_color <- colorRampPalette(brewer.pal(9, "Purples"))(10)
 
 #Model 3 
@@ -340,9 +342,9 @@ df3_top10_graph
 # Data Frame 3 Model 3-- Top 10 Species with most collisions 1992-2023 
 
 -------------------------------------------------------------------------------
-#' Creating a top 10 species bar graph with disposition stats 
+#'Creating a top 10 species bar graph with disposition stats 
 #
-# Creating a data frame 3 subset to separate the top 10 collided species
+#Creating a data frame 3 subset to separate the top 10 collided species
 
 df3_subset <- subset(df_3, Species_Name %in% c('Red-Tailed Hawk',
                                  'Barred Owl',
@@ -365,7 +367,7 @@ ggplot(df3_subset, aes(x = Species_Name, fill= disposition_data)) +
   ylab("%") +
   ggtitle("Top 10 Species Collisions with disposition")
 
-# sorting from most collisions to least 
+#sorting from most collisions to least 
 
 ggplot(df3_subset, aes(x = factor(Species_Name, 
                   level=c('Red-Tailed Hawk', 'Barred Owl','Eastern Screech Owl', 
@@ -396,7 +398,7 @@ Disposition_Collision_Graph <-
 
 Disposition_Collision_Graph
 -------------------------------------------------------------------------------
-#' Red-Tailed Hawk Collision graph 
+#'Red-Tailed Hawk Collision graph 
 RTHW_subset <- subset(df_3, Species_Name %in% c('Red-Tailed Hawk'))
 RTHW_sub_subset <- RTHW_subset[ , c("Species_Name", "Year.Admitted", 
                                         "Disposition")]  
@@ -421,7 +423,7 @@ RTHW_Collision_Graph <-
 
 RTHW_Collision_Graph
 -------------------------------------------------------------------------------
-#Barred Owl Collision Graph 
+#'Barred Owl Collision Graph 
 
 Bar_Owl_subset <- subset(df_3, Species_Name %in% c('Barred Owl'))
 Bar_Owl_sub_subset <- Bar_Owl_subset[ , c("Species_Name", "Year.Admitted", 
@@ -448,7 +450,9 @@ Barred_Owl_Collision_Graph <-
 
 Barred_Owl_Collision_Graph
 -------------------------------------------------------------------------------
-#' Eastern Screech Owl
+#'Eastern Screech Owl
+#
+
 EASO_subset <- subset(df_3, Species_Name %in% c('Eastern Screech Owl'))
 EASO_sub_subset <- EASO_subset[ , c("Species_Name", "Year.Admitted", 
                                     "Disposition")]  
@@ -473,7 +477,9 @@ EASO_Collision_Graph <-
 
 EASO_Collision_Graph
 -------------------------------------------------------------------------------
-#' Great Horned Owl Collision graph 
+#'Great Horned Owl Collision graph 
+#
+
 GHOW_subset <- subset(df_3, Species_Name %in% c('Great Horned Owl'))
 GHOW_sub_subset <- GHOW_subset[ , c("Species_Name", "Year.Admitted", 
                                     "Disposition")]  
@@ -498,7 +504,7 @@ GHOW_Collision_Graph <-
 
 GHOW_Collision_Graph
 -------------------------------------------------------------------------------
-#' Graphs 
+#'Graphs 
 
   df1_top10_graph
 
