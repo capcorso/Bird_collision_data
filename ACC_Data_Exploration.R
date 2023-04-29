@@ -493,14 +493,14 @@ agg_GHOW <- aggregate(GHOW_sub_subset$Species_Name,
 disp_GHOW <- agg_GHOW$Group.2
 
 model_8 <- 
-  ggplot(agg_GHOW, aes(x =Group.1, y = x, color = Disp_GHOW)) +
+  ggplot(agg_GHOW, aes(x =Group.1, y = x, color = disp_GHOW)) +
   geom_point(size=4) +
   xlab("Year Admitted") +
   ylab("Collisions") + 
   ggtitle("Great Horned Owl Yearly Collisions")
 
 GHOW_Collision_Graph <-
-  model_5 + scale_color_discrete(name = "Disposition")
+  model_8 + scale_color_discrete(name = "Disposition")
 
 GHOW_Collision_Graph
 -------------------------------------------------------------------------------
