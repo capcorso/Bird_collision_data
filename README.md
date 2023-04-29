@@ -1,9 +1,7 @@
-the objective of the project
-the structure of the code-base including dependencies
-the structure of the data that is required as input including the metadata
-instructions on how to recreate your results
-any relevant acknowledgements
+An Exploration of Avian Conservation Center Collision Data 
 
+    The Avian Conservation Center & Center For Birds of Prey located in Awendaw, SC accepts injured birds brought in by the public. When a raptor or bird is brought to the clinic the center collects data on factors including their species, cause of injury and whether the bird survived after treatment or succumbed to its injuries. The objective of this project was to use recorded collision data in R Scipt programing to examine the relationship between species, frequency and mortaily rates of bird strikes. With the goal of being able to target conservation efforts by identifying the most vulnerable species. 
+    The study used two different data sets that contained bird collision data. The first data set titled 'Old.ACC.dat.csv' in this repository contained collision data from 1992 through 2017. This data was obtained by a previous students repository, Casey Conrad's 2018 Analysis of Avian Conservation Center bird strikes project. Which can be found here: https://github.com/conradcd/ACC_Bird_Strikes. The second data set titled 'new.data.csv.numbers', contained collision data of 2017 through 2023, this was obtained by contacting the current ACC Avian Clinic Manager,  Jessie Griswold at: jessie.griswold@avianconservationcenter.org . 
+    The specific data explored in this alaysis was the species names, their frequency of collisions with mortality and survival rates after collision. The two data sets were explored seperately and together by binding the data frames. To recreate my results run the 'ACC_Data_Exploration' scipt using data found in 'data' folder of this repository. 
+    I would like to thank and acknowledge Dr. Dan McGlinn for his guidance and support throughout this project. In addition to Jessie Griswold and Casey Conrad for thier assistance in obtaining the avian collision data explored. 
 
-The objective of this project was to examine two sets of bird collision data collected by the Avian Conservation Center (ACC). The first set of data was collected from 1992 to 2017 and the second set of colision data was collected from 2019-2023. The Avian Concervation Center collected data on birds that had collsisions with either building windows or cars and were called into the center or brought in for treatment. The Center kept record of the species of bird, the otucome as to weather the bird was released 
-The research aimed at examining the different collision rates between species, in addition to looking at which species had higher rates of mortality when collision incidents occured. 

@@ -216,6 +216,7 @@ for(i in seq(1, nrow(df_2))){
   else if(df_2$Disposition[i]== "Reh")
     df_2$Disposition[i] = "Transfer"
 }
+
 sort(table(df_1$Species_Name))
 sort(table(df_2$Species_Name))
 
@@ -251,13 +252,6 @@ ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency),
 nb.cols <- 10
 df1_model1_color <- colorRampPalette(brewer.pal(9, "Greens"))(10)
 
-ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), 
-                               y = percentage)) +
-  geom_bar(stat = "identity", fill= df1_model1_color) +
-  xlab(" ") +
-  ylab("%") +
-  ggtitle("Top 10 Species with most collisions 1992-2017")
-
 df1_top10_graph <-
   ggplot(df1_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), 
                                  y = percentage)) +
@@ -267,6 +261,7 @@ df1_top10_graph <-
   ggtitle("Top 10 Species with most collisions 1992-2017") 
 
 # Data Frame 1 Model 1-- Top 10 Species with most collisions 1992-2017 
+df1_top10_graph
 
 --------------------------------------------------------------------------------
 #'Data Frame 2 Model 2  
@@ -289,11 +284,6 @@ df2_subset_top10sp$percentage <- as.numeric(df2_subset_top10sp$percentage)
 df2_model2_color <- colorRampPalette(brewer.pal(9, "Blues"))(10)
 
 #Model 2 
-ggplot(df2_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
-  geom_bar(stat = "identity", fill= df2_model2_color) +
-  xlab(" ") +
-  ylab("%") +
-  ggtitle("Top 10 Species with most collisions 2019-2023")
 
 df2_top10_graph <-
   ggplot(df2_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
@@ -303,6 +293,8 @@ df2_top10_graph <-
   ggtitle("Top 10 Species with most collisions 2019-2023")
 
 # Data Frame 2 Model 2-- Top 10 Species with most collisions 2019-2023 
+
+df2_top10_graph
 
 --------------------------------------------------------------------------------
 #' Binding Data frame 1 and 2 to make Data frame 3
@@ -335,11 +327,6 @@ df3_subset_top10sp$percentage <- as.numeric(df3_subset_top10sp$percentage)
 df3_model3_color <- colorRampPalette(brewer.pal(9, "Purples"))(10)
 
 #Model 3 
-ggplot(df3_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
-  geom_bar(stat = "identity", fill= df3_model3_color) +
-  xlab(" ") +
-  ylab("%") +
-  ggtitle("Top 10 Species with most collisions 1992-2023")
 
 df3_top10_graph <-
   ggplot(df3_subset_top10sp, aes(x = reorder(Species_Name, -Frequency), y = percentage)) +
@@ -347,6 +334,8 @@ df3_top10_graph <-
   xlab(" ") +
   ylab("%") +
   ggtitle("Top 10 Species with most collisions 1992 - 2023")
+
+df3_top10_graph 
 
 # Data Frame 3 Model 3-- Top 10 Species with most collisions 1992-2023 
 
