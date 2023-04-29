@@ -19,8 +19,10 @@ data set titled 'new.data.csv.numbers', contained collision data of 2017 through
 
 The specific data explored in this alaysis was the species names, their frequency of 
 collisions with mortality and survival rates after collision. The two data sets were 
-explored seperately and together by binding the data frames. To recreate my results 
-run the 'ACC_Data_Exploration' scipt using data found in 'data' folder of this repository. 
+explored seperately and together by binding the data frames. To recreate my figures 
+found in the 'Figures' folder run the 'ACC_Data_Exploration' scipt using the 
+two sets of data found in 'data' folder of this repository named 
+'new.data.csv (1).csv' and 'Old.ACC.dat.csv'. 
     
 I would like to thank and acknowledge Dr. Dan McGlinn for his guidance and support 
 throughout this project. In addition to Jessie Griswold and Casey Conrad for thier 
